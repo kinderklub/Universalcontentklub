@@ -1,0 +1,2667 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Universal Content Klub Studio</title>
+
+  <!-- Google Font: Quicksand -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Quicksand', 'sans-serif'],
+          },
+          colors: {
+            sprinkles: {
+              pink: '#FE51B0',
+              blue: '#07BDFF',
+              mint: '#00C69E',
+              yellow: '#F5E45F',
+              orange: '#FD7839',
+              lilac: '#E2C1F3',
+              cream: '#FFF9F2',
+              card: '#FFFFFF',
+              dark: '#1E1627',
+              darkSoft: '#4A3B5D',
+              border: '#F0E2F5'
+            }
+          },
+          boxShadow: {
+            'pop-sm': '0 3px 0 0 #1E1627',
+            'pop': '0 4px 0 0 #1E1627',
+            'pop-lg': '0 6px 0 0 #1E1627',
+            'pop-active': '0 1px 0 0 #1E1627',
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after, input, textarea, button, select, span, p, h1, h2, h3, h4, div {
+      font-family: 'Quicksand', sans-serif !important;
+    }
+
+    body {
+      background-color: #FFF9F2;
+      background-image: 
+        radial-gradient(#E2C1F3 1px, transparent 1px),
+        radial-gradient(#F5E45F 1px, #FFF9F2 1px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FFF0E5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E2C1F3;
+      border-radius: 9999px;
+      border: 2px solid #FFF9F2;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FE51B0;
+    }
+
+    .pop-card {
+      background: #FFFFFF;
+      border: 2.5px solid #1E1627;
+      box-shadow: 4px 4px 0 0 #1E1627;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pop-btn {
+      border: 2px solid #1E1627;
+      box-shadow: 3px 3px 0 0 #1E1627;
+      transition: all 0.15s ease-in-out;
+    }
+    .pop-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 0 #1E1627;
+    }
+    .pop-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 0 #1E1627;
+    }
+
+    .nav-tab-active {
+      background-color: #FE51B0 !important;
+      color: #FFFFFF !important;
+      border-color: #1E1627 !important;
+      box-shadow: 3px 3px 0 0 #1E1627 !important;
+    }
+  </style>
+</head>
+
+<body class="text-sprinkles-dark min-h-screen selection:bg-sprinkles-pink selection:text-white flex flex-col antialiased">
+
+  <!-- Header Bar -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b-2.5 border-sprinkles-dark px-4 sm:px-6 py-3 border-b-2">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+      
+      <!-- Brand Logo -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-2xl bg-sprinkles-pink flex items-center justify-center pop-btn text-white font-black text-xl">
+          🎯
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="text-base sm:text-lg font-black tracking-tight text-sprinkles-dark flex items-center gap-1.5">
+              <span>Universal Content Klub Studio</span>
+            </h1>
+          </div>
+          <p class="text-xs font-bold text-sprinkles-darkSoft hidden sm:block">100% Suara Sembang Rojak Manusia (Tepat Ikut Fungsi Produk Anda)</p>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center space-x-2">
+        <button type="button" id="openLibraryBtn" onclick="openLibraryModal()" class="pop-btn flex items-center space-x-1.5 px-3 py-2 text-xs sm:text-sm font-extrabold rounded-xl bg-sprinkles-lilac text-sprinkles-dark hover:bg-sprinkles-lilac/80">
+          <span>🔖</span>
+          <span class="hidden md:inline">Pustaka</span>
+          <span id="savedCountBadge" class="ml-1 px-1.5 py-0.2 rounded-full text-[10px] bg-sprinkles-pink text-white font-black border border-sprinkles-dark">0</span>
+        </button>
+
+        <button type="button" id="openApiModalBtn" onclick="openApiModal()" class="pop-btn flex items-center space-x-1.5 px-3 py-2 text-xs sm:text-sm font-extrabold rounded-xl bg-sprinkles-blue text-white hover:bg-sprinkles-blue/90">
+          <span>🔑</span>
+          <span class="hidden sm:inline">Kunci Gemini API</span>
+          <span id="apiStatusDot" class="w-2.5 h-2.5 rounded-full bg-sprinkles-yellow border border-sprinkles-dark inline-block"></span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- NAVIGATION TABS -->
+  <div class="max-w-7xl mx-auto w-full px-3 sm:px-6 pt-4">
+    <div class="p-1.5 bg-white border-2 border-sprinkles-dark rounded-2xl shadow-pop flex items-center gap-1.5 overflow-x-auto">
+      <button type="button" onclick="switchMainTab('laser')" id="tabBtnLaser" class="nav-tab nav-tab-active flex-1 min-w-[140px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 transition">
+        <span>🎯</span>
+        <span>Laser Avatar Studio</span>
+      </button>
+
+      <button type="button" onclick="switchMainTab('magnet')" id="tabBtnMagnet" class="nav-tab flex-1 min-w-[170px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-black bg-sprinkles-cream text-sprinkles-dark hover:bg-sprinkles-yellow/40 flex items-center justify-center gap-2 transition">
+        <span>🧲</span>
+        <span>Comment Magnet + Stealth Plug</span>
+        <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-sprinkles-orange text-white font-black">VIRAL</span>
+      </button>
+
+      <button type="button" onclick="switchMainTab('angles')" id="tabBtnAngles" class="nav-tab flex-1 min-w-[150px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-black bg-sprinkles-cream text-sprinkles-dark hover:bg-sprinkles-mint/40 flex items-center justify-center gap-2 transition">
+        <span>🧭</span>
+        <span>1-Sentence Angle Finder</span>
+      </button>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto w-full px-3 sm:px-6 py-5 flex-1">
+    
+    <!-- ========================================== -->
+    <!-- TAB 1: LASER AVATAR STUDIO (SCRIPT MAKER) -->
+    <!-- ========================================== -->
+    <div id="sectionLaser" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      
+      <!-- FORM INPUT -->
+      <div class="lg:col-span-5 space-y-4">
+        <div class="pop-card rounded-3xl p-5 sm:p-6 space-y-4 bg-white">
+          
+          <!-- Sample Presets -->
+          <div class="p-3 rounded-2xl bg-sprinkles-lilac/30 border-2 border-sprinkles-dark/15 flex items-center justify-between flex-wrap gap-2">
+            <span class="text-xs font-black text-sprinkles-dark flex items-center gap-1.5">
+              <span>⚡</span> Cuba Contoh Niche:
+            </span>
+            <div class="flex items-center space-x-1.5 text-xs font-black">
+              <button type="button" onclick="loadSamplePreset('vitamin')" class="pop-btn px-2.5 py-1 rounded-xl bg-sprinkles-orange text-white">
+                🍓 Vitamin Anak
+              </button>
+              <button type="button" onclick="loadSamplePreset('edugame')" class="pop-btn px-2.5 py-1 rounded-xl bg-sprinkles-yellow text-sprinkles-dark">
+                🧩 Edu Games Tadika
+              </button>
+              <button type="button" onclick="loadSamplePreset('income')" class="pop-btn px-2.5 py-1 rounded-xl bg-sprinkles-mint text-sprinkles-dark">
+                💼 Side Income
+              </button>
+              <button type="button" onclick="loadSamplePreset('clear')" class="pop-btn px-2 py-1 rounded-xl bg-white text-sprinkles-dark hover:bg-rose-100" title="Kosongkan">
+                🔄
+              </button>
+            </div>
+          </div>
+
+          <!-- 1. Bahan Jualan -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-black text-sprinkles-dark flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-lg bg-sprinkles-pink/20 text-sprinkles-pink flex items-center justify-center font-black text-xs border border-sprinkles-pink">1</span>
+              <span>Bahan Jualan / Produk</span>
+              <span class="text-sprinkles-pink font-black">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="inputProduct" 
+              placeholder="Taip nama & fungsi produk di sini..."
+              class="w-full text-xs sm:text-sm px-4 py-3 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-extrabold focus:outline-none focus:bg-white focus:border-sprinkles-pink focus:ring-4 focus:ring-sprinkles-pink/20 transition"
+            >
+          </div>
+
+          <!-- 2. Call Out Prospek -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-black text-sprinkles-dark flex items-center gap-1.5">
+              <span class="w-5 h-5 rounded-lg bg-sprinkles-blue/20 text-sprinkles-blue flex items-center justify-center font-black text-xs border border-sprinkles-blue">2</span>
+              <span>Call Out Prospek Spesifik</span>
+              <span class="text-sprinkles-pink font-black">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="inputAvatar" 
+              placeholder="Taip siapa prospek spesifik di sini..."
+              class="w-full text-xs sm:text-sm px-4 py-3 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-extrabold focus:outline-none focus:bg-white focus:border-sprinkles-blue focus:ring-4 focus:ring-sprinkles-blue/20 transition"
+            >
+          </div>
+
+          <!-- 3. Titik Sakit -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-black text-sprinkles-dark flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-lg bg-sprinkles-orange/20 text-sprinkles-orange flex items-center justify-center font-black text-xs border border-sprinkles-orange">3</span>
+                <span>Benda Paling Buat Stress / Serabut</span>
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-sprinkles-orange/20 text-sprinkles-orange font-black">Boleh biar kosong (AI auto-fikir)</span>
+            </label>
+            <textarea 
+              id="inputPain" 
+              rows="2"
+              placeholder="Biar kosong untuk AI auto-fikir senario harian yang tepat ikut produk di atas..."
+              class="w-full text-xs sm:text-sm px-4 py-2.5 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-bold focus:outline-none focus:bg-white focus:border-sprinkles-orange transition resize-none placeholder:text-sprinkles-darkSoft/40"
+            ></textarea>
+          </div>
+
+          <!-- 4. Dream -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-black text-sprinkles-dark flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <span class="w-5 h-5 rounded-lg bg-sprinkles-mint/20 text-sprinkles-mint flex items-center justify-center font-black text-xs border border-sprinkles-mint">4</span>
+                <span>Hasil Idaman / Rasa Settle</span>
+              </span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-sprinkles-mint/20 text-sprinkles-mint font-black">Boleh biar kosong (AI auto-fikir)</span>
+            </label>
+            <textarea 
+              id="inputDream" 
+              rows="2"
+              placeholder="Biar kosong untuk AI auto-fikir rasa lega bila masalah dah settle..."
+              class="w-full text-xs sm:text-sm px-4 py-2.5 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-bold focus:outline-none focus:bg-white focus:border-sprinkles-mint transition resize-none placeholder:text-sprinkles-darkSoft/40"
+            ></textarea>
+          </div>
+
+          <!-- 5. Format Penulisan -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-black text-sprinkles-dark">📑 5. Format Penulisan</label>
+            <div class="grid grid-cols-2 gap-2" id="formatToggleGroup">
+              <button type="button" id="formatThreadBtn" onclick="selectFormat('thread')" class="pop-btn px-3 py-2 text-xs rounded-xl bg-sprinkles-pink text-white font-black flex items-center justify-center gap-1.5">
+                <span>🧵 Bebenang (5 Pos)</span>
+              </button>
+              <button type="button" id="formatSingleBtn" onclick="selectFormat('single')" class="pop-btn px-3 py-2 text-xs rounded-xl bg-white text-sprinkles-dark font-black hover:bg-sprinkles-lilac/30 flex items-center justify-center gap-1.5">
+                <span>⚡ Single Post</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 6. Sudut Hook Pilihan -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-black text-sprinkles-dark flex items-center justify-between">
+              <span>🧲 6. Gaya Sembang Pembukaan</span>
+              <span class="text-[10px] font-black text-sprinkles-pink">100% Dialog Harian</span>
+            </label>
+            <div class="grid grid-cols-2 gap-2" id="hookChipsContainer">
+              <button type="button" onclick="selectHookAngle('dialog', this)" class="hook-chip active pop-btn px-2 py-2 rounded-xl text-[11px] font-black bg-sprinkles-pink text-white text-center">
+                💬 Dialog / Bisik Sendiri
+              </button>
+              <button type="button" onclick="selectHookAngle('confession', this)" class="hook-chip pop-btn px-2 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-lilac/50 text-center">
+                🤫 Luahan / Mengaku Je
+              </button>
+              <button type="button" onclick="selectHookAngle('truth', this)" class="hook-chip pop-btn px-2 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-orange/50 text-center">
+                ⚡ Cakap Terang Realiti
+              </button>
+              <button type="button" onclick="selectHookAngle('micro', this)" class="hook-chip pop-btn px-2 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-mint/50 text-center">
+                🔍 Benda Remeh Buat Sakit Hati
+              </button>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <div class="pt-3 border-t-2 border-sprinkles-dark/15 space-y-2.5">
+            <div class="flex items-center justify-between text-xs font-bold text-sprinkles-darkSoft px-1">
+              <span>Status Enjin:</span>
+              <span id="activeEngineLabel" class="text-sprinkles-orange font-black flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-sprinkles-orange/15 border border-sprinkles-orange">
+                ⚡ Turbo Local Engine
+              </span>
+            </div>
+
+            <button 
+              type="button"
+              id="generateScriptBtn" 
+              onclick="handleGenerateClick(event)" 
+              class="pop-btn w-full py-3.5 rounded-2xl bg-gradient-to-r from-sprinkles-pink via-sprinkles-orange to-sprinkles-yellow hover:opacity-95 text-white font-black text-sm sm:text-base tracking-wide flex items-center justify-center space-x-2">
+              <span>✨</span>
+              <span id="generateBtnText">Jana Skrip Santai Sekarang</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SCRIPT OUTPUT -->
+      <div class="lg:col-span-7 space-y-4">
+        
+        <div class="pop-card rounded-3xl p-5 flex flex-wrap items-center justify-between gap-3 bg-white">
+          <div>
+            <div class="flex items-center gap-2">
+              <h2 class="text-base sm:text-lg font-black text-sprinkles-dark flex items-center gap-2">
+                <span>📝</span>
+                <span>Hasil Skrip Sembang</span>
+              </h2>
+              <span id="formatStatusBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-sprinkles-mint text-sprinkles-dark font-black border border-sprinkles-dark">
+                Bebenang (5 Pos)
+              </span>
+              <span id="engineGeneratedBadge" class="text-[10px] px-2.5 py-0.5 rounded-full bg-sprinkles-yellow text-sprinkles-dark font-black border border-sprinkles-dark hidden">
+                Ready
+              </span>
+            </div>
+            <p class="text-xs font-bold text-sprinkles-darkSoft mt-0.5" id="outputMetaText">
+              Gaya sembang lepak macam kita cakap dengan kawan sendiri kat Threads/IG.
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <button 
+              type="button"
+              id="copyAllBtn" 
+              onclick="copyAllThreadToClipboard()" 
+              disabled 
+              class="opacity-40 cursor-not-allowed pop-btn px-3.5 py-2 rounded-xl bg-sprinkles-blue text-white text-xs font-black transition flex items-center gap-1.5">
+              <span>📋</span>
+              <span>Salin Semua</span>
+            </button>
+            <button 
+              type="button"
+              id="saveToLibBtn" 
+              onclick="saveCurrentToLibrary('laser')" 
+              disabled 
+              class="opacity-40 cursor-not-allowed pop-btn px-3.5 py-2 rounded-xl bg-sprinkles-yellow text-sprinkles-dark text-xs font-black transition flex items-center gap-1.5">
+              <span>🔖</span>
+              <span>Simpan</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="cardsList" class="space-y-4">
+          <div id="emptyStatePlaceholder" class="pop-card rounded-3xl p-8 sm:p-12 text-center space-y-3 bg-white/80">
+            <div class="w-16 h-16 rounded-3xl bg-sprinkles-lilac border-2 border-sprinkles-dark flex items-center justify-center mx-auto text-3xl shadow-pop-sm">
+              ✍️
+            </div>
+            <h3 class="text-base font-black text-sprinkles-dark">Belum Ada Skrip Dijana</h3>
+            <p class="text-xs font-bold text-sprinkles-darkSoft max-w-sm mx-auto leading-relaxed">
+              Taip bahan jualan & siapa yang you nak target kat sebelah kiri. AI akan baca terus fungsi produk tersebut secara tepat tanpa reka cerita lain!
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TAB 2: COMMENT MAGNET & STEALTH PLUG (CONVERSATIONAL COMMERCE) -->
+    <!-- ============================================================== -->
+    <div id="sectionMagnet" class="hidden space-y-6">
+      
+      <div class="pop-card rounded-3xl p-6 bg-gradient-to-r from-sprinkles-yellow/40 via-sprinkles-pink/20 to-sprinkles-blue/20 border-2 border-sprinkles-dark space-y-2">
+        <div class="flex items-center gap-2">
+          <span class="px-2.5 py-1 rounded-full bg-sprinkles-pink text-white text-[11px] font-black border border-sprinkles-dark">
+            🔥 VIRAL CONVERSATION
+          </span>
+          <span class="text-xs font-black text-sprinkles-dark">Buat netizen laju drop komen</span>
+        </div>
+        <h2 class="text-lg sm:text-2xl font-black text-sprinkles-dark">
+          Buka Borak Santai Yang Bikin Orang Gatal Tangan Nak Reply!
+        </h2>
+        <p class="text-xs sm:text-sm font-bold text-sprinkles-darkSoft max-w-2xl leading-relaxed">
+          Bukan engagement murahan, tapi topik panas yang orang geram nak ulas. Siap dengan <span class="text-sprinkles-pink font-black">Komen Pin Selit Produk</span> bila komen dah mula meriah!
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Magnet Input Panel -->
+        <div class="lg:col-span-5 space-y-4">
+          <div class="pop-card rounded-3xl p-5 sm:p-6 bg-white space-y-4">
+            
+            <div class="space-y-1.5">
+              <label class="block text-xs font-black text-sprinkles-dark flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                  <span class="w-5 h-5 rounded-lg bg-sprinkles-pink/20 text-sprinkles-pink flex items-center justify-center font-black text-xs border border-sprinkles-pink">1</span>
+                  <span>Topik / Isu Apa You Nak Ajak Borak?</span>
+                </span>
+              </label>
+              <input 
+                type="text" 
+                id="magnetTopicInput" 
+                placeholder="Taip topik atau isu perbualan di sini..." 
+                class="w-full text-xs sm:text-sm px-4 py-3 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-extrabold focus:outline-none focus:bg-white focus:border-sprinkles-pink transition"
+              >
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block text-xs font-black text-sprinkles-dark flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                  <span class="w-5 h-5 rounded-lg bg-sprinkles-blue/20 text-sprinkles-blue flex items-center justify-center font-black text-xs border border-sprinkles-blue">2</span>
+                  <span>Siapa Geng Yang Selalu Kena Benda Ni?</span>
+                </span>
+                <span class="text-[10px] text-sprinkles-blue font-black">Target tribe</span>
+              </label>
+              <input 
+                type="text" 
+                id="magnetTribeInput" 
+                placeholder="Contoh: Mak anak tadika / Pekerja makan gaji / Suri rumah" 
+                class="w-full text-xs sm:text-sm px-4 py-3 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-extrabold focus:outline-none focus:bg-white focus:border-sprinkles-blue transition"
+              >
+            </div>
+
+            <div class="space-y-1.5">
+              <label class="block text-xs font-black text-sprinkles-dark flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                  <span class="w-5 h-5 rounded-lg bg-sprinkles-mint/20 text-sprinkles-mint flex items-center justify-center font-black text-xs border border-sprinkles-mint">3</span>
+                  <span>Produk Yang Nak Diselit Kat Komen Pin</span>
+                </span>
+                <span class="text-[10px] text-sprinkles-mint font-black">Pintu Jualan</span>
+              </label>
+              <input 
+                type="text" 
+                id="magnetProductInput" 
+                placeholder="Taip produk untuk diselit dalam komen pin..." 
+                class="w-full text-xs sm:text-sm px-4 py-3 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-extrabold focus:outline-none focus:bg-white focus:border-sprinkles-mint transition"
+              >
+            </div>
+
+            <div class="space-y-2">
+              <label class="block text-xs font-black text-sprinkles-dark flex items-center justify-between">
+                <span>🎭 Umpan Emosi Yang You Nak:</span>
+              </label>
+              <div class="grid grid-cols-2 gap-2" id="magnetFlavorContainer">
+                <button type="button" onclick="selectMagnetFlavor('all', this)" class="magnet-flavor active pop-btn px-2.5 py-2 rounded-xl text-[11px] font-black bg-sprinkles-dark text-white text-center">
+                  ✨ Jana Semua (6 Gaya)
+                </button>
+                <button type="button" onclick="selectMagnetFlavor('debate', this)" class="magnet-flavor pop-btn px-2.5 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-orange/30 text-center">
+                  🥊 Korang Team Mana?
+                </button>
+                <button type="button" onclick="selectMagnetFlavor('confession', this)" class="magnet-flavor pop-btn px-2.5 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-pink/30 text-center">
+                  🤫 Mengaku Je La...
+                </button>
+                <button type="button" onclick="selectMagnetFlavor('crowdsource', this)" class="magnet-flavor pop-btn px-2.5 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-yellow/40 text-center">
+                  🧠 Nak Tanya Pendapat Korang
+                </button>
+                <button type="button" onclick="selectMagnetFlavor('rant', this)" class="magnet-flavor pop-btn px-2.5 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-blue/30 text-center">
+                  💔 Geram Betul Rasa
+                </button>
+                <button type="button" onclick="selectMagnetFlavor('unpopular', this)" class="magnet-flavor pop-btn px-2.5 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-mint/30 text-center">
+                  🛑 Ramai Elak Cakap Ni
+                </button>
+              </div>
+            </div>
+
+            <div class="pt-3 border-t-2 border-sprinkles-dark/15">
+              <button 
+                type="button"
+                id="generateMagnetBtn" 
+                onclick="handleMagnetGenerateClick(event)" 
+                class="pop-btn w-full py-3.5 rounded-2xl bg-sprinkles-pink hover:bg-sprinkles-pink/90 text-white font-black text-sm flex items-center justify-center gap-2">
+                <span>🧲</span>
+                <span id="generateMagnetBtnText">Jana Comment Magnet + Komen Pin</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Magnet Output List -->
+        <div class="lg:col-span-7 space-y-4">
+          
+          <div class="pop-card rounded-3xl p-5 flex items-center justify-between bg-white">
+            <div>
+              <h3 class="text-base font-black text-sprinkles-dark flex items-center gap-2">
+                <span>💬</span>
+                <span>Pancingan Borak & Komen Pin</span>
+                <span id="magnetEngineBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-sprinkles-yellow text-sprinkles-dark font-black border border-sprinkles-dark">Ready</span>
+              </h3>
+              <p class="text-xs font-bold text-sprinkles-darkSoft mt-0.5">
+                Salin Post Utama dulu. Bila komen dah masuk 5-10 biji, baru letak Komen Pin kat atas!
+              </p>
+            </div>
+          </div>
+
+          <div id="magnetResultsContainer" class="space-y-4">
+            <div id="magnetEmptyState" class="pop-card rounded-3xl p-8 sm:p-12 text-center space-y-3 bg-white/80">
+              <div class="w-16 h-16 rounded-3xl bg-sprinkles-yellow border-2 border-sprinkles-dark flex items-center justify-center mx-auto text-3xl shadow-pop-sm">
+                🧲
+              </div>
+              <h4 class="text-base font-black text-sprinkles-dark">Belum Ada Magnet Dijana</h4>
+              <p class="text-xs font-bold text-sprinkles-darkSoft max-w-sm mx-auto leading-relaxed">
+                Taip isu yang you nak ajak bincang kat sebelah kiri. Sistem akan keluarkan post pembuka yang buat orang laju drop pandangan!
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- TAB 3: 1-SENTENCE ANGLE FINDER -->
+    <!-- ============================================================== -->
+    <div id="sectionAngles" class="hidden space-y-6">
+      
+      <div class="pop-card rounded-3xl p-6 bg-white space-y-4 border-2 border-sprinkles-dark max-w-3xl mx-auto">
+        <div class="text-center space-y-1">
+          <span class="px-3 py-1 rounded-full bg-sprinkles-mint text-sprinkles-dark text-xs font-black border border-sprinkles-dark inline-block mb-1">
+            🧭 ANGLE FINDER REALITI
+          </span>
+          <h2 class="text-xl sm:text-2xl font-black text-sprinkles-dark">Buntu Nak Cerita Apa Hari Ni?</h2>
+          <p class="text-xs sm:text-sm font-bold text-sprinkles-darkSoft max-w-lg mx-auto">
+            Produk sama, 6 sudut cerita sembang manusia yang tak klise. Tekan cari untuk dapatkan idea fresh!
+          </p>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="angleQuickProductInput" 
+              placeholder="Taip apa yang you nak jual di sini..."
+              class="w-full text-xs sm:text-sm px-4 py-3.5 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-extrabold focus:outline-none focus:bg-white focus:border-sprinkles-mint transition"
+            >
+            <button 
+              type="button"
+              id="angleSearchBtn" 
+              onclick="handleAngleSearchClick(event)" 
+              class="pop-btn px-5 py-3.5 rounded-2xl bg-sprinkles-mint hover:bg-sprinkles-mint/80 text-sprinkles-dark font-black text-xs sm:text-sm whitespace-nowrap flex items-center gap-1.5">
+              <span>🔍</span>
+              <span id="angleSearchBtnText">Cari Sudut</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap text-xs font-extrabold text-sprinkles-darkSoft">
+            <span>Cuba klik:</span>
+            <button type="button" onclick="fillAngleInput('Edu games tadika untuk kurangkan screen time')" class="underline hover:text-sprinkles-pink">Edu Games Tadika</button>
+            <span>•</span>
+            <button type="button" onclick="fillAngleInput('Gummy vitamin C untuk anak tolak sayur')" class="underline hover:text-sprinkles-pink">Vitamin Anak</button>
+            <span>•</span>
+            <button type="button" onclick="fillAngleInput('Side income santai dari phone lepas anak tidur')" class="underline hover:text-sprinkles-pink">Side Income Phone</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Angle Cards Grid -->
+      <div id="angleCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-auto py-6 border-t-2 border-sprinkles-dark/15 text-center text-xs font-black text-sprinkles-darkSoft">
+    Kinder Klub | All Rights Reserved.
+  </footer>
+
+  <!-- MODAL: Kunci Gemini API -->
+  <div id="apiModal" class="fixed inset-0 z-50 bg-sprinkles-dark/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="pop-card bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+      
+      <div class="flex items-center justify-between pb-3 border-b-2 border-sprinkles-dark/15">
+        <h3 class="text-base font-black text-sprinkles-dark flex items-center gap-2">
+          <span>🔑</span>
+          <span>Tetapan Google Gemini API</span>
+        </h3>
+        <button type="button" onclick="closeApiModal()" class="w-8 h-8 rounded-full bg-sprinkles-lilac border border-sprinkles-dark flex items-center justify-center text-sprinkles-dark font-black hover:bg-sprinkles-pink hover:text-white transition">
+          ✕
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs font-bold">
+        <div class="p-3.5 rounded-2xl bg-sprinkles-yellow/30 border-2 border-sprinkles-dark space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-black text-sprinkles-dark flex items-center gap-1.5">
+              <span>⚡</span> Kunci Percuma di Google AI Studio
+            </span>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-sprinkles-mint text-sprinkles-dark font-black border border-sprinkles-dark">Free Tier</span>
+          </div>
+          <p class="text-[11px] text-sprinkles-darkSoft font-bold leading-relaxed">
+            Dapatkan kunci percuma anda dalam 30 saat. Klik pautan di bawah:
+          </p>
+          <a 
+            href="https://aistudio.google.com/app/apikey" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            class="pop-btn w-full py-2.5 px-3 rounded-xl bg-sprinkles-pink hover:opacity-95 text-white font-black text-xs flex items-center justify-center gap-2 transition text-center shadow-sm">
+            <span>🚀</span>
+            <span>Buka Google AI Studio</span>
+            <span class="text-[10px] opacity-90">↗</span>
+          </a>
+        </div>
+
+        <div>
+          <label class="block text-sprinkles-dark font-black mb-1">Kunci API Gemini Anda:</label>
+          <input 
+            type="password" 
+            id="apiKeyInput" 
+            placeholder="Tampal kunci AIzaSy... di sini" 
+            class="w-full text-xs px-3.5 py-3 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark text-sprinkles-dark font-extrabold focus:outline-none focus:border-sprinkles-blue transition"
+          >
+        </div>
+
+        <div id="apiTestResult" class="hidden text-xs p-3 rounded-2xl font-black border-2 border-sprinkles-dark"></div>
+      </div>
+
+      <div class="pt-2 border-t-2 border-sprinkles-dark/15 flex items-center justify-end space-x-2 text-xs">
+        <button type="button" onclick="testApiKeyValidity(event)" class="pop-btn px-4 py-2.5 rounded-xl bg-sprinkles-lilac text-sprinkles-dark font-black transition">
+          🔍 Uji Kunci
+        </button>
+        <button type="button" onclick="saveApiKeySettings()" class="pop-btn px-5 py-2.5 rounded-xl bg-sprinkles-blue text-white font-black transition">
+          Simpan Kunci
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL: Pustaka Tersimpan -->
+  <div id="libraryModal" class="fixed inset-0 z-50 bg-sprinkles-dark/60 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="pop-card bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl relative max-h-[85vh] flex flex-col">
+      
+      <div class="flex items-center justify-between pb-3 border-b-2 border-sprinkles-dark/15">
+        <h3 class="text-base font-black text-sprinkles-dark flex items-center gap-2">
+          <span>🔖</span>
+          <span>Pustaka Skrip Tersimpan</span>
+        </h3>
+        <button type="button" onclick="closeLibraryModal()" class="w-8 h-8 rounded-full bg-sprinkles-lilac border border-sprinkles-dark flex items-center justify-center text-sprinkles-dark font-black hover:bg-sprinkles-pink hover:text-white transition">
+          ✕
+        </button>
+      </div>
+
+      <div class="overflow-y-auto flex-1 pr-1 space-y-3" id="libraryList"></div>
+
+      <div class="pt-3 border-t-2 border-sprinkles-dark/15 flex items-center justify-between">
+        <button type="button" onclick="clearAllLibrary()" class="text-xs text-sprinkles-orange hover:text-rose-600 font-black transition flex items-center gap-1">
+          🗑️ Kosongkan Semua
+        </button>
+        <button type="button" onclick="closeLibraryModal()" class="pop-btn px-4 py-2 rounded-xl bg-sprinkles-lilac text-sprinkles-dark text-xs font-black transition">
+          Tutup
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <script>
+    /* ===============================================================
+       GLOBAL CRASH SHIELD & RESILIENT STORAGE
+       =============================================================== */
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+      console.warn("Handled Application Error:", msg);
+      return true;
+    };
+
+    window.addEventListener('error', function(event) {
+      if (event) {
+        event.preventDefault();
+        if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      }
+      return true;
+    }, true);
+
+    window.addEventListener('unhandledrejection', function(event) {
+      if (event) {
+        event.preventDefault();
+        if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      }
+      return true;
+    }, true);
+
+    const SafeStorage = {
+      getItem(key) {
+        try { return localStorage.getItem(key); } catch (e) { return null; }
+      },
+      setItem(key, value) {
+        try { localStorage.setItem(key, value); } catch (e) {}
+      },
+      removeItem(key) {
+        try { localStorage.removeItem(key); } catch (e) {}
+      }
+    };
+
+    /* ===============================================================
+       SANITISER AKSARA ASING & SIMBOL BOCOK (ANTI-TOKEN BLEEDING)
+       =============================================================== */
+    function sanitizeMalayText(str) {
+      if (!str || typeof str !== 'string') return '';
+      return str
+        // Buang aksara CJK (Cina, Jepun, Korea) yang bocor dari tokenizer AI (contoh: 碌, 的, 了)
+        .replace(/[\u2E80-\u2FD5\u3190-\u319F\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAAD]/g, '')
+        // Buang karakter kawalan rosak & replacement char
+        .replace(/[\uFFFD\u007F-\u009F]/g, '')
+        // Trim lebihan ruang kosong yang terhasil
+        .replace(/[ \t]+/g, ' ')
+        .trim();
+    }
+
+    /* ===============================================================
+       GLOBAL STATE & CONFIGURATION
+       =============================================================== */
+    let cachedModel = SafeStorage.getItem('user_preferred_gemini_model') || '';
+
+    const STATE = {
+      activeTab: 'laser',
+      laser: {
+        format: 'thread',
+        hookAngle: 'dialog',
+        currentResults: null,
+        isGenerating: false,
+        engineUsed: 'turbo'
+      },
+      magnet: {
+        flavor: 'all',
+        currentResults: [],
+        isGenerating: false
+      },
+      angles: {
+        currentList: [],
+        currentProductRaw: '',
+        isGenerating: false
+      },
+      apiKey: SafeStorage.getItem('user_gemini_api_key') || '',
+      preferredModel: cachedModel || '',
+      knownWorkingModels: [],
+      savedLibrary: []
+    };
+
+    const SAMPLE_PRESETS = {
+      vitamin: {
+        product: "Gummy Vitamin C & Sayur untuk Kanak-kanak",
+        avatar: "Mak yang pening kepala anak tolak makan sayur & kerap selsema",
+        pain: "",
+        dream: "",
+        hookAngle: "dialog",
+        format: "thread"
+      },
+      edugame: {
+        product: "Edu Games & Puzzle Montessori untuk Tadika",
+        avatar: "Mak ayah yang risau anak ketagih skrin phone & tantrum",
+        pain: "",
+        dream: "",
+        hookAngle: "dialog",
+        format: "thread"
+      },
+      income: {
+        product: "Panduan Affiliate Digital (Target extra RM500 sebulan)",
+        avatar: "Pekerja makan gaji yang perlukan duit poket lebih tanpa modal besar",
+        pain: "",
+        dream: "",
+        hookAngle: "truth",
+        format: "thread"
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadSavedLibraryFromStorage();
+      updateApiKeyStatusIndicator();
+      updateEngineDisplay();
+    });
+
+    function switchMainTab(tabKey) {
+      STATE.activeTab = tabKey;
+      
+      const tabLaser = document.getElementById('tabBtnLaser');
+      const tabMagnet = document.getElementById('tabBtnMagnet');
+      const tabAngles = document.getElementById('tabBtnAngles');
+
+      const secLaser = document.getElementById('sectionLaser');
+      const secMagnet = document.getElementById('sectionMagnet');
+      const secAngles = document.getElementById('sectionAngles');
+
+      [tabLaser, tabMagnet, tabAngles].forEach(t => {
+        if (t) t.className = "nav-tab flex-1 min-w-[140px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-black bg-sprinkles-cream text-sprinkles-dark hover:bg-sprinkles-yellow/40 flex items-center justify-center gap-2 transition";
+      });
+
+      if (secLaser) secLaser.classList.add('hidden');
+      if (secMagnet) secMagnet.classList.add('hidden');
+      if (secAngles) secAngles.classList.add('hidden');
+
+      if (tabKey === 'laser' && tabLaser && secLaser) {
+        tabLaser.className = "nav-tab nav-tab-active flex-1 min-w-[140px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 transition";
+        secLaser.classList.remove('hidden');
+      } else if (tabKey === 'magnet' && tabMagnet && secMagnet) {
+        tabMagnet.className = "nav-tab nav-tab-active flex-1 min-w-[170px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 transition";
+        secMagnet.classList.remove('hidden');
+      } else if (tabKey === 'angles' && tabAngles && secAngles) {
+        tabAngles.className = "nav-tab nav-tab-active flex-1 min-w-[150px] py-2.5 px-3 rounded-xl text-xs sm:text-sm font-black flex items-center justify-center gap-2 transition";
+        secAngles.classList.remove('hidden');
+      }
+    }
+
+    function selectHookAngle(angleKey, el) {
+      STATE.laser.hookAngle = angleKey;
+      document.querySelectorAll('.hook-chip').forEach(chip => {
+        chip.className = "hook-chip pop-btn px-2 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-pink/20 text-center";
+      });
+      if (el) el.className = "hook-chip active pop-btn px-2 py-2 rounded-xl text-[11px] font-black bg-sprinkles-pink text-white text-center";
+    }
+
+    function selectFormat(formatType) {
+      STATE.laser.format = formatType;
+      const threadBtn = document.getElementById('formatThreadBtn');
+      const singleBtn = document.getElementById('formatSingleBtn');
+      const formatStatusBadge = document.getElementById('formatStatusBadge');
+
+      if (formatType === 'thread') {
+        if (threadBtn) threadBtn.className = "pop-btn px-3 py-2 text-xs rounded-xl bg-sprinkles-pink text-white font-black flex items-center justify-center gap-1.5";
+        if (singleBtn) singleBtn.className = "pop-btn px-3 py-2 text-xs rounded-xl bg-white text-sprinkles-dark font-black hover:bg-sprinkles-lilac/30 flex items-center justify-center gap-1.5";
+        if (formatStatusBadge) {
+          formatStatusBadge.textContent = "Bebenang (5 Pos)";
+          formatStatusBadge.className = "text-xs px-2.5 py-0.5 rounded-full bg-sprinkles-mint text-sprinkles-dark font-black border border-sprinkles-dark";
+        }
+      } else {
+        if (singleBtn) singleBtn.className = "pop-btn px-3 py-2 text-xs rounded-xl bg-sprinkles-blue text-white font-black flex items-center justify-center gap-1.5";
+        if (threadBtn) threadBtn.className = "pop-btn px-3 py-2 text-xs rounded-xl bg-white text-sprinkles-dark font-black hover:bg-sprinkles-lilac/30 flex items-center justify-center gap-1.5";
+        if (formatStatusBadge) {
+          formatStatusBadge.textContent = "Single Post";
+          formatStatusBadge.className = "text-xs px-2.5 py-0.5 rounded-full bg-sprinkles-yellow text-sprinkles-dark font-black border border-sprinkles-dark";
+        }
+      }
+    }
+
+    function loadSamplePreset(presetKey) {
+      if (presetKey === 'clear') {
+        document.getElementById('inputProduct').value = '';
+        document.getElementById('inputAvatar').value = '';
+        document.getElementById('inputPain').value = '';
+        document.getElementById('inputDream').value = '';
+        showToast("Borang dikosongkan.", "info");
+        return;
+      }
+
+      const preset = SAMPLE_PRESETS[presetKey];
+      if (!preset) return;
+
+      document.getElementById('inputProduct').value = preset.product;
+      document.getElementById('inputAvatar').value = preset.avatar;
+      document.getElementById('inputPain').value = preset.pain;
+      document.getElementById('inputDream').value = preset.dream;
+
+      selectFormat(preset.format);
+      showToast(`Contoh "${presetKey.toUpperCase()}" dimuatkan!`, "success");
+    }
+
+    function updateEngineDisplay() {
+      const label = document.getElementById('activeEngineLabel');
+      if (!label) return;
+      if (STATE.apiKey) {
+        const cleanName = (STATE.preferredModel || 'Gemini Active').replace('models/', '');
+        label.innerHTML = `🟢 Gemini Live AI (${cleanName})`;
+        label.className = "text-sprinkles-mint font-black flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-sprinkles-mint/20 border border-sprinkles-mint";
+      } else {
+        label.innerHTML = `⚡ Turbo Local Engine`;
+        label.className = "text-sprinkles-orange font-black flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-sprinkles-orange/15 border border-sprinkles-orange";
+      }
+    }
+
+    /* ===============================================================
+       RESILIENT JSON EXTRACTOR & PARSER
+       =============================================================== */
+    function extractAndParseJSON(rawText) {
+      if (!rawText) throw new Error("Respons kosong daripada enjin AI.");
+      let cleaned = String(rawText).trim();
+
+      cleaned = cleaned.replace(/^```(?:json)?\s*/gi, '').replace(/\s*```$/gi, '').trim();
+
+      const firstBrace = cleaned.search(/[\{\[]/);
+      const lastBrace = Math.max(cleaned.lastIndexOf('}'), cleaned.lastIndexOf(']'));
+
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace >= firstBrace) {
+        cleaned = cleaned.substring(firstBrace, lastBrace + 1);
+      }
+
+      try {
+        return JSON.parse(cleaned);
+      } catch (e1) {
+        try {
+          const sanitized = cleaned.replace(/[\u0000-\u001F\u007F-\u009F]/g, " ");
+          return JSON.parse(sanitized);
+        } catch (e2) {
+          const posts = [];
+          const postRegex = /"phaseTag"\s*:\s*"([^"]+)"[\s\S]*?"content"\s*:\s*"([\s\S]*?)(?="\s*,\s*"postIndex"|"\s*,\s*"phaseTag"|\s*\}\s*,\s*\{|\s*\}\s*\])/g;
+          let match;
+          let idx = 1;
+          while ((match = postRegex.exec(cleaned)) !== null) {
+            posts.push({
+              postIndex: idx++,
+              phaseTag: match[1],
+              content: match[2].replace(/\\n/g, '\n').replace(/\\"/g, '"')
+            });
+          }
+
+          if (posts.length > 0) {
+            return {
+              hookTitle: "Skrip Sembang AI",
+              formatType: "thread",
+              posts: posts
+            };
+          }
+          throw new Error("Ralat format data");
+        }
+      }
+    }
+
+    /* ===============================================================
+       DYNAMIC GEMINI DISCOVERY & API CALLER
+       =============================================================== */
+    async function queryGoogleForAvailableModels(apiKey) {
+      const cleanKey = String(apiKey || '').trim();
+      if (!cleanKey) return [];
+
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${cleanKey}`);
+        if (!res.ok) return [];
+        const data = await res.json();
+        const rawList = data.models || [];
+
+        const validGenerative = rawList
+          .filter(m => {
+            if (!m || typeof m.name !== 'string') return false;
+            const methods = Array.isArray(m.supportedGenerationMethods) ? m.supportedGenerationMethods : [];
+            const supportsGen = methods.includes('generateContent');
+            const nameLower = m.name.toLowerCase();
+            const isForbidden = nameLower.includes('embedding') || 
+                                nameLower.includes('aqa') || 
+                                nameLower.includes('bison') ||
+                                nameLower.includes('vision') ||
+                                nameLower.includes('imagen');
+            return supportsGen && !isForbidden;
+          })
+          .map(m => m.name.replace(/^models\//, ''));
+
+        validGenerative.sort((a, b) => {
+          const aFlash = a.includes('flash') ? 1 : 0;
+          const bFlash = b.includes('flash') ? 1 : 0;
+          if (aFlash !== bFlash) return bFlash - aFlash;
+          return b.localeCompare(a);
+        });
+
+        return validGenerative;
+      } catch (e) {
+        return [];
+      }
+    }
+
+    async function callGeminiGenerate(promptText, systemInstructionText, apiKey) {
+      const cleanKey = String(apiKey || '').trim();
+      if (!cleanKey) throw new Error("Kunci API kosong.");
+
+      let candidateModels = [];
+
+      if (STATE.preferredModel) {
+        candidateModels.push(STATE.preferredModel.replace(/^models\//, ''));
+      }
+
+      if (Array.isArray(STATE.knownWorkingModels) && STATE.knownWorkingModels.length > 0) {
+        STATE.knownWorkingModels.forEach(m => {
+          if (!candidateModels.includes(m)) candidateModels.push(m);
+        });
+      }
+
+      if (candidateModels.length === 0) {
+        const liveModels = await queryGoogleForAvailableModels(cleanKey);
+        if (liveModels.length > 0) {
+          STATE.knownWorkingModels = liveModels;
+          candidateModels = liveModels;
+        }
+      }
+
+      const fallbackList = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-2.5-flash-lite'];
+      fallbackList.forEach(m => {
+        if (!candidateModels.includes(m)) candidateModels.push(m);
+      });
+
+      const requestSeed = `[SEED_${Date.now()}_${Math.floor(Math.random() * 99999)}]`;
+      const enrichedPrompt = `${promptText}\n\nSeed Rawak: ${requestSeed}\nSILA PASTIKAN HASIL 100% RELEVAN DENGAN PRODUK SEBENAR, HANYA GUNA HURUF RUMI BAHASA MELAYU & ENGLISH (TIADA AKSARA CINA/ASING), & GAYA ROJAK MALAYSIA ASLI.`;
+
+      let lastError = null;
+
+      for (const modelName of candidateModels) {
+        try {
+          const cleanModel = modelName.replace(/^models\//, '');
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${cleanModel}:generateContent?key=${cleanKey}`;
+          
+          const payload = {
+            contents: [
+              {
+                role: "user",
+                parts: [
+                  { 
+                    text: systemInstructionText 
+                      ? `${systemInstructionText}\n\n---\nTUGASAN ANDA:\n${enrichedPrompt}`
+                      : enrichedPrompt 
+                  }
+                ]
+              }
+            ],
+            generationConfig: {
+              responseMimeType: "application/json",
+              temperature: 0.7,
+              maxOutputTokens: 3000
+            }
+          };
+
+          const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (response.status === 429) {
+            throw new Error(`QUOTA_EXCEEDED: Had kuota Google dicapai untuk model ${cleanModel}.`);
+          }
+
+          if (response.status === 404) {
+            continue;
+          }
+
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            const msg = errData?.error?.message || `HTTP ${response.status}`;
+            throw new Error(`[${cleanModel}] ${msg}`);
+          }
+
+          const data = await response.json();
+          const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!rawText) throw new Error(`Model ${cleanModel} tidak mengembalikan teks.`);
+
+          const parsed = extractAndParseJSON(rawText);
+
+          STATE.preferredModel = cleanModel;
+          SafeStorage.setItem('user_preferred_gemini_model', cleanModel);
+          updateEngineDisplay();
+
+          return { parsed, modelName: cleanModel };
+        } catch (err) {
+          lastError = err;
+          if (err.message && err.message.includes('QUOTA_EXCEEDED')) {
+            throw err;
+          }
+        }
+      }
+
+      throw lastError || new Error("Gagal menyambung ke mana-mana model Gemini yang sah.");
+    }
+
+    function normalizeLaserData(data, defaultAvatar) {
+      if (!data) return null;
+      let postsArray = [];
+
+      if (Array.isArray(data)) {
+        postsArray = data;
+      } else if (Array.isArray(data.posts)) {
+        postsArray = data.posts;
+      } else if (data.posts && typeof data.posts === 'object') {
+        postsArray = Object.values(data.posts);
+      } else {
+        postsArray = [data];
+      }
+
+      const normalizedPosts = postsArray.map((p, idx) => {
+        let contentStr = '';
+        if (typeof p === 'string') {
+          contentStr = p;
+        } else if (p && typeof p === 'object') {
+          contentStr = p.content || p.text || p.isi || p.body || p.caption || '';
+        }
+        return {
+          postIndex: idx + 1,
+          phaseTag: sanitizeMalayText((p && p.phaseTag) ? p.phaseTag : `Pos ${idx + 1}`),
+          content: sanitizeMalayText(String(contentStr))
+        };
+      }).filter(p => p.content.length > 0);
+
+      let hookVariants = [];
+      if (Array.isArray(data.hookVariants)) {
+        hookVariants = data.hookVariants.map(v => ({
+          angleType: sanitizeMalayText(String(v.angleType || v.title || 'Sudut Borak')),
+          content: sanitizeMalayText(String(v.content || v.text || ''))
+        })).filter(v => v.content.length > 0);
+      }
+
+      return {
+        hookTitle: sanitizeMalayText(String(data.hookTitle || `Skrip Sembang: ${defaultAvatar}`)),
+        formatType: String(data.formatType || 'thread'),
+        targetAvatar: sanitizeMalayText(String(data.targetAvatar || defaultAvatar)),
+        hookVariants: hookVariants,
+        posts: normalizedPosts.length > 0 ? normalizedPosts : [{ postIndex: 1, phaseTag: 'Pos 1', content: 'Tiada teks dijana.' }]
+      };
+    }
+
+    function normalizeMagnetData(data) {
+      let array = [];
+      if (Array.isArray(data)) {
+        array = data;
+      } else if (data && typeof data === 'object') {
+        array = Array.isArray(data.magnets) ? data.magnets : 
+                Array.isArray(data.items) ? data.items :
+                Array.isArray(data.data) ? data.data : Object.values(data);
+      }
+
+      return array.map((item, idx) => {
+        if (!item || typeof item !== 'object') {
+          return {
+            category: 'debate',
+            badgeTitle: `Topik #${idx + 1}`,
+            psychologyWhy: 'Mencetus interaksi aktif.',
+            mainPost: sanitizeMalayText(String(item || '')),
+            stealthPinComment: '',
+            crowdPredictions: []
+          };
+        }
+        return {
+          category: String(item.category || 'all'),
+          badgeTitle: sanitizeMalayText(String(item.badgeTitle || item.title || `Magnet #${idx + 1}`)),
+          psychologyWhy: sanitizeMalayText(String(item.psychologyWhy || item.why || 'Mencetus emosi netizen.')),
+          mainPost: sanitizeMalayText(String(item.mainPost || item.post || item.content || item.text || '')),
+          stealthPinComment: sanitizeMalayText(String(item.stealthPinComment || item.pinComment || item.comment || '')),
+          crowdPredictions: Array.isArray(item.crowdPredictions) 
+            ? item.crowdPredictions.map(cp => sanitizeMalayText(String(cp))) 
+            : []
+        };
+      }).filter(item => item.mainPost.trim().length > 0);
+    }
+
+    function normalizeAngleData(data, rawProduct) {
+      let array = [];
+      if (Array.isArray(data)) {
+        array = data;
+      } else if (data && typeof data === 'object') {
+        array = Array.isArray(data.angles) ? data.angles : 
+                Array.isArray(data.items) ? data.items :
+                Array.isArray(data.data) ? data.data : Object.values(data);
+      }
+
+      const defaultColors = [
+        "bg-sprinkles-pink text-white",
+        "bg-sprinkles-orange text-white",
+        "bg-sprinkles-yellow text-sprinkles-dark",
+        "bg-sprinkles-mint text-sprinkles-dark",
+        "bg-sprinkles-blue text-white",
+        "bg-sprinkles-lilac text-sprinkles-dark"
+      ];
+
+      return array.map((item, idx) => {
+        if (!item || typeof item !== 'object') {
+          return {
+            angleNum: `0${idx + 1}`,
+            tag: `Sudut 0${idx + 1}`,
+            color: defaultColors[idx % defaultColors.length],
+            summary: sanitizeMalayText(String(rawProduct)),
+            hookSnippet: sanitizeMalayText(String(item || ''))
+          };
+        }
+        return {
+          angleNum: String(item.angleNum || `0${idx + 1}`),
+          tag: sanitizeMalayText(String(item.tag || item.title || `Sudut ${idx + 1}`)),
+          color: String(item.color || defaultColors[idx % defaultColors.length]),
+          summary: sanitizeMalayText(String(item.summary || item.description || '')),
+          hookSnippet: sanitizeMalayText(String(item.hookSnippet || item.hook || ''))
+        };
+      }).filter(item => item.hookSnippet.trim().length > 0);
+    }
+
+    /* ===============================================================
+       FAILSAFE EVENT HANDLERS
+       =============================================================== */
+    function handleGenerateClick(e) {
+      if (e) {
+        e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      try {
+        triggerContentGeneration().catch(err => {
+          console.warn("Recovered from generation error:", err);
+          executeSafeTurboLaserFallback();
+        });
+      } catch (err) {
+        console.warn("Recovered from sync click error:", err);
+        executeSafeTurboLaserFallback();
+      }
+      return false;
+    }
+
+    function executeSafeTurboLaserFallback() {
+      try {
+        const product = (document.getElementById('inputProduct')?.value || '').trim() || 'produk ni';
+        const avatar = (document.getElementById('inputAvatar')?.value || '').trim() || 'You';
+        const fallback = normalizeLaserData(generateViaTurboLaser({
+          product,
+          avatar,
+          userPain: document.getElementById('inputPain')?.value || '',
+          userDream: document.getElementById('inputDream')?.value || '',
+          format: STATE.laser.format,
+          hookAngle: STATE.laser.hookAngle
+        }), avatar);
+        STATE.laser.currentResults = fallback;
+        STATE.laser.engineUsed = 'turbo';
+        renderLaserCards(fallback);
+        updateLaserEngineBadge(false, '', 'Enjin Turbo siap');
+        showToast("Skrip siap dijana oleh Turbo Engine! ⚡", "success");
+      } catch (e) {
+        console.warn("Fallback completed:", e);
+      } finally {
+        setLaserLoadingState(false);
+      }
+    }
+
+    /* ===============================================================
+       MODULE 1: GENERATE LASER SCRIPT
+       =============================================================== */
+    async function triggerContentGeneration() {
+      if (STATE.laser.isGenerating) return;
+
+      const product = (document.getElementById('inputProduct')?.value || '').trim();
+      const avatar = (document.getElementById('inputAvatar')?.value || '').trim();
+      const userPain = (document.getElementById('inputPain')?.value || '').trim();
+      const userDream = (document.getElementById('inputDream')?.value || '').trim();
+
+      if (!product || !avatar) {
+        showToast("Sila isi Bahan Jualan dan Prospek dahulu ya!", "error");
+        return;
+      }
+
+      setLaserLoadingState(true);
+
+      const params = {
+        product,
+        avatar,
+        userPain,
+        userDream,
+        format: STATE.laser.format,
+        hookAngle: STATE.laser.hookAngle
+      };
+
+      try {
+        let rawResults = null;
+        let isUsingGemini = false;
+        let activeModel = '';
+        let errorDetail = '';
+
+        if (STATE.apiKey) {
+          try {
+            showToast("🟢 Menghantar ke Gemini Live AI...", "info");
+            const res = await generateViaGeminiLaser(params);
+            rawResults = res.parsed;
+            activeModel = res.modelName;
+            isUsingGemini = true;
+          } catch (e) {
+            errorDetail = (e && e.message) ? String(e.message) : 'Ralat sambungan';
+            showToast("⚡ Enjin Turbo mengambil alih...", "info");
+            rawResults = generateViaTurboLaser(params);
+          }
+        } else {
+          await new Promise(r => setTimeout(r, 150));
+          rawResults = generateViaTurboLaser(params);
+        }
+
+        const safeResults = normalizeLaserData(rawResults, avatar);
+        STATE.laser.currentResults = safeResults;
+        STATE.laser.engineUsed = isUsingGemini ? `gemini (${activeModel})` : 'turbo';
+
+        renderLaserCards(safeResults);
+        updateLaserEngineBadge(isUsingGemini, activeModel, errorDetail);
+
+        const copyBtn = document.getElementById('copyAllBtn');
+        const saveBtn = document.getElementById('saveToLibBtn');
+        if (copyBtn) {
+          copyBtn.disabled = false;
+          copyBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        }
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        }
+
+        showToast(isUsingGemini ? `✨ Segar dari Gemini Live AI (${activeModel})!` : "Skrip dijana oleh Turbo Engine! ⚡", "success");
+      } catch (err) {
+        executeSafeTurboLaserFallback();
+      } finally {
+        setLaserLoadingState(false);
+      }
+    }
+
+    function updateLaserEngineBadge(isGemini, modelName, errorMsg = '') {
+      const badge = document.getElementById('engineGeneratedBadge');
+      if (!badge) return;
+      badge.classList.remove('hidden');
+      if (isGemini) {
+        badge.textContent = `🟢 Gemini Live AI (${modelName || 'Active'})`;
+        badge.className = "text-[10px] px-2.5 py-0.5 rounded-full bg-sprinkles-mint text-sprinkles-dark font-black border border-sprinkles-dark shadow-sm";
+      } else {
+        badge.textContent = `⚡ Turbo Engine (Ready)`;
+        badge.className = "text-[10px] px-2.5 py-0.5 rounded-full bg-sprinkles-yellow text-sprinkles-dark font-black border border-sprinkles-dark";
+      }
+    }
+
+    function setLaserLoadingState(isLoading) {
+      STATE.laser.isGenerating = isLoading;
+      const btn = document.getElementById('generateScriptBtn');
+      const btnText = document.getElementById('generateBtnText');
+      if (!btn || !btnText) return;
+      if (isLoading) {
+        btn.disabled = true;
+        btn.classList.add('opacity-75', 'cursor-wait');
+        btnText.innerHTML = `⏳ Sedang Menjana...`;
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('opacity-75', 'cursor-wait');
+        btnText.textContent = "Jana Skrip Santai Sekarang";
+      }
+    }
+
+    async function generateViaGeminiLaser(params) {
+      const systemPrompt = `Anda adalah kawan rapat Malaysia yang sembang santai di kedai kopi atau Threads/TikTok (100% Gaya Rojak Manglish Bandar).
+PERATURAN PALING PENTING (MUTLAK):
+1. FOKUS 100% KEPADA FUNGSI SEBENAR PRODUK: "${params.product}" DAN PROSPEK: "${params.avatar}".
+   - BACA DENGAN TELITI APA SEBENARNYA PRODUK INI.
+   - JANGAN SESEKALI reka masalah yang tiada kaitan dengan produk ini.
+2. DILARANG SAMA SEKALI GUNA BAHASA INDONESIA (bisa, banget, solusi, nggak, kamu, anda).
+3. DILARANG KERAS GUNA BAHASA SASTERA BUKU TEKS:
+   - JANGAN TULIS: 'geseran kecil', 'mengikis kesabaran secara senyap', 'punca utama', 'membazir tenaga', 'titik tolak', 'solusi praktikal'.
+   - TULIS GAYA BORAK LEPAK: 'stress gila', 'penat weh', 'benda kecik macam ni la buat serabut', 'fed up', 'struggle', 'cut the crap', 'settle', 'lepak'.
+4. DILARANG SAMA SEKALI MENGELUARKAN SEBARANG AKSARA CINA / KANJI / MANDARIN / SIMBOL ASING (SEPERTI 碌, 的, 了, 呀). WAJIB 100% HURUF RUMI (LATIN ALPHABET) BAHASA MELAYU & ENGLISH DAN EMOJI SAHAJA.
+5. FORMAT JSON PENTING: Di dalam nilai teks, gunakan tanda petik tunggal (') untuk dialog sembang dan BUKAN tanda petik berganda (") agar format JSON sah.
+6. WAJIB balas dalam bentuk JSON SAHAJA.`;
+
+      let painInstruction = params.userPain 
+        ? `Titik Sakit Sebenar: "${params.userPain}"`
+        : `Titik Sakit: DEDUCE KESUKARAN SEBENAR YANG TEPAT IKUT PRODUK "${params.product}".`;
+
+      let dreamInstruction = params.userDream
+        ? `Hasil Idaman: "${params.userDream}"`
+        : `Hasil Idaman: DEDUCE KELEGAAN SEBENAR BILA MENGGUNAKAN PRODUK "${params.product}".`;
+
+      const userInstruction = `Tulis skrip ${params.format === 'thread' ? 'Bebenang (5 Pos Bersambung)' : 'Single Post padat'}:
+Produk: "${params.product}"
+Prospek: "${params.avatar}"
+${painInstruction}
+${dreamInstruction}
+Gaya Hook: ${params.hookAngle}
+
+Format JSON:
+{
+  "hookTitle": "Tajuk Skrip",
+  "formatType": "${params.format}",
+  "targetAvatar": "${params.avatar}",
+  "hookVariants": [
+    {"angleType": "💬 Dialog Bisik Sendiri", "content": "Ayat pembukaan dialog spesifik..."},
+    {"angleType": "🤫 Mengaku Je La", "content": "Ayat pembukaan luahan jujur..."},
+    {"angleType": "⚡ Realiti Terang", "content": "Ayat pembukaan realiti sentap..."}
+  ],
+  "posts": [
+    {"postIndex": 1, "phaseTag": "1/5 • Detik Sentap", "content": "Isi pos 1..."},
+    {"postIndex": 2, "phaseTag": "2/5 • Stress Sebenar", "content": "Isi pos 2..."},
+    {"postIndex": 3, "phaseTag": "3/5 • Detik Fed Up", "content": "Isi pos 3..."},
+    {"postIndex": 4, "phaseTag": "4/5 • Cara Settle & Produk", "content": "Isi pos 4..."},
+    {"postIndex": 5, "phaseTag": "5/5 • Kesimpulan & CTA", "content": "Isi pos 5..."}
+  ]
+}`;
+
+      return await callGeminiGenerate(userInstruction, systemPrompt, STATE.apiKey);
+    }
+
+    function generateViaTurboLaser(params) {
+      const { product, avatar, userPain, userDream, format } = params;
+      const cleanProd = (product || '').split('(')[0].trim() || "produk ni";
+      const cleanAvatar = (avatar || '').split('/')[0].trim() || "You";
+      const combined = `${product} ${avatar}`.toLowerCase();
+
+      let resolvedPain = userPain;
+      let resolvedDream = userDream;
+
+      const isEduGameOrPreschool = (combined.includes('edu game') || combined.includes('puzzle') || combined.includes('montessori') || combined.includes('tadika') || combined.includes('fonik') || combined.includes('screen time')) && !combined.includes('exam') && !combined.includes('spm');
+      const isKidNutrition = (combined.includes('vitamin') || combined.includes('gummy') || combined.includes('sayur') || combined.includes('picky eater') || combined.includes('selera makan')) && !isEduGameOrPreschool;
+      const isSleepWear = (combined.includes('baju tidur') || combined.includes('pyjamas') || combined.includes('pajamas')) && !isEduGameOrPreschool;
+      const isIncome = combined.includes('side income') || combined.includes('affiliate') || combined.includes('tambah duit') || combined.includes('gaji');
+      const isSkincare = combined.includes('serum') || combined.includes('jeragat') || combined.includes('skincare') || combined.includes('breakout');
+
+      let chosenHook = "";
+      let p2Content = "";
+      let p3Content = "";
+
+      if (isEduGameOrPreschool) {
+        if (!resolvedPain) resolvedPain = "anak asyik nak phone sampai tantrum bila minta balik, mak ayah risau sangat daya fokus dia rosak sebelum masuk sekolah";
+        if (!resolvedDream) resolvedDream = "anak leka main sambil belajar kenal huruf dan warna secara ceria tanpa perlu hadap skrin telefon lagi";
+
+        chosenHook = `"Bila I minta balik phone petang tadi, anak terus hempas badan menangis macam kena pukul..." Jam baru pukul 5.30 petang, tapi rasa bersalah dada mak bila tengok anak tak boleh berenggang dengan skrin gajet.`;
+        p2Content = `Bila anak mula tantrum setiap kali handphone diambil, jujur I cakap stress dia takleh bawak bincang weh. Kita nak ajar dia kenal huruf dan fonik, tapi bila buka buku biasa anak buat muka bosan lepastu lari.\n\nMak ayah mana tak risau bila tengok anak kawan sebaya dah pandai bercakap dan fokus, tapi anak sendiri masih leka scroll video laju-laju.`;
+        p3Content = `Sampai satu tahap I cakap kat diri sendiri: "Takleh jadi ni, fitrah budak umur macam ni memang suka bermain, bukan duduk dipaksa hafal kaku!"\n\nI mula cari jalan macam mana nak alihkan perhatian dia daripada skrin kepada aktiviti hands-on yang betul-betul buat otak dia teruja nak explore.`;
+      } else if (isKidNutrition) {
+        if (!resolvedPain) resolvedPain = "anak tolak suap makanan sampai badan susut, mak risau antibodi lemah dan kerap berulang demam";
+        if (!resolvedDream) resolvedDream = "anak kunyah vitamin dengan rela dan selera makan makin bertambah tanpa perang suap";
+
+        chosenHook = `"Makanlah satu suap je lagi adik, mama suap sikit je ni..." Jam dah pukul 8.30 malam, tapi pinggan nasi anak masih elok tak berusik. Bila tengok dia tolak suap sambil tutup mulut rapat, rasa berderai hati mak.`;
+        p2Content = `Bila anak kerap tolak makanan sihat, rasa risau mak ayah bukan biasa-biasa. Kita takut sangat berat badan dia drop dan antibodi dia lemah sampai kerap jatuh sakit selsema.\n\nBila tengok anak susah nak telan zat sayur, kita jadi serba salah setiap kali waktu makan tiba. Nak paksa takut trauma, nak biar rasa tak bertanggungjawab.`;
+        p3Content = `Sampailah satu hari I tukar strategi: "Daripada berperang paksa anak telan benda yang dia tolak, baik cari alternatif yang anak suka kunyah sendiri secara rela!"\n\nBila anak seronok kunyah benda sedap yang penuh khasiat, automatik selera dia terbuka dan hati mak pun kembali lapang.`;
+      } else if (isSleepWear) {
+        if (!resolvedPain) resolvedPain = "anak tidur malam asyik merengek berguling sebab berpeluh panas dan leher naik ruam gatal";
+        if (!resolvedDream) resolvedDream = "anak tidur lena nyenyak sampai pagi dengan kain sejuk tanpa merengek lagi";
+
+        chosenHook = `"Mama, gatal... panas..." Pukul 2.30 pagi anak terjaga merengek sambil menggaru leher dan belakang badan yang dah merah berpeluh. Bila rasa baju dia yang melekit basah, terus rasa serba salah sangat.`;
+        p2Content = `Kulit budak kecil ni nipis dan sensitif sangat. Bila pakai kain yang memerangkap haba, peluh dia tak dapat keluar lalu jadi punca ruam gatal dan radang.\n\nBila anak tak selesa dan kerap terjaga tengah malam, bukan anak je yang letih, emosi mak ayah pun terganggu sampai kerja esok pagi rasa serabut.`;
+        p3Content = `Titik tolak bermula bila I nekad singkirkan semua baju kain panas dan mula cari material yang betul-betul bernafas dan lembut pada kulit anak.\n\nFokus I senang je: pastikan anak rasa sejuk dan selesa dari malam sampai ke pagi tanpa perlu buka aircond kuat-kuat.`;
+      } else if (isIncome) {
+        if (!resolvedPain) resolvedPain = "gaji baru seminggu masuk dah licin bayar komitmen, dada berdebar takut takde simpanan kecemasan";
+        if (!resolvedDream) resolvedDream = "dapat extra RM500 - RM1,000 bersih sebulan secara santai dari phone untuk tampung belanja harian";
+
+        chosenHook = `"Tinggal RM45 je dalam akaun..." Ayat ni keluar perlahan bila I check baki phone tadi. Masa tu baru 5 hari lepas gaji masuk, tapi semua licin bayar komitmen. Dada rasa berdebar sangat.`;
+        p2Content = `Zaman sekarang, bergantung pada satu gaji ibarat bawa kereta laju tanpa tayar spare. Sekali tayar pancit, terus terduduk tak tahu nak minta tolong siapa.\n\nBila bil dapur makin naik dan anak minta barang tapi kita kena tahan nafsu, rasa serba salah sebagai ketua keluarga atau mak ayah takleh bincang.`;
+        p3Content = `Sampai satu tahap I cakap: "Aku kena cari punca duit kedua yang tak perlukan modal besar dan tak ganggu kerja hakiki."\n\nI nak sesuatu yang simple, boleh buat dari phone bila ada masa terluang petang atau malam lepas anak tidur.`;
+      } else if (isSkincare) {
+        if (!resolvedPain) resolvedPain = "tompok jeragat tebal makin merebak kat pipi sampai segan nak keluar rumah tanpa makeup tebal";
+        if (!resolvedDream) resolvedDream = "kulit muka nampak bersih glowing natural walau sapu sunscreen nipis je";
+
+        chosenHook = `"Kenapa tompok ni makin gelap eh?" Ayat ni keluar masa I tengah tengok cermin bawah lampu terang tadi. Bila rasa tekstur pipi yang kasar dan tompok jeragat makin merebak, terus rasa down satu hari.`;
+        p2Content = `Bila muka ada tompok gelap, benda paling buat serabut ialah bila kena hadap orang dekat-dekat. Kita rasa macam mata semua orang tertumpu kat cela pipi kita.\n\nBila cuaca panas bedak mula bercapuk, lagi la rasa nak elak daripada ambil gambar atau jumpa kawan-kawan.`;
+        p3Content = `I nekad berhenti bazir duit beli produk overclaim yang konon 3 hari putih tapi merosakkan kulit. I cuma nak produk yang selamat, berasaskan bahan aktif yang terbukti dan betul-betul pulihkan tekstur kulit.`;
+      } else {
+        if (!resolvedPain) resolvedPain = `penat dok cuba macam-macam cara sebelum ni tapi urusan pasal ${cleanProd} ni dok serabut macam tu jugak`;
+        if (!resolvedDream) resolvedDream = `dapat jalan yang senang, praktikal dan betul-betul selesaikan isu pasal ${cleanProd} ni`;
+
+        chosenHook = `"Penatlah macam ni setiap kali..." Ayat ni terkeluar perlahan masa I tengah duduk termenung tadi. Bila fikir pasal situasi ${resolvedPain}, dada rasa sesak sangat.`;
+        p2Content = `Bila hari-hari kena hadap benda ni, stress dia takleh bawak bincang weh. Dari luar orang nampak macam biasa je, tapi hakikatnya kita yang lalui ni rasa lemau gila sebab mental penat fikir benda sama.\n\nIsu ${resolvedPain} ni bukan benda remeh bila dibiar lama-lama.`;
+        p3Content = `Sampai satu tahap I cakap kat diri sendiri: "Takleh jadi ni, aku kena stop buang masa buat cara yang tak menjadi."\n\nFokus I satu je: I nak jalan yang simple, selamat, and betul-betul settlekan masalah tanpa tambah serabut baru.`;
+      }
+
+      const hookVariants = [
+        { angleType: "💬 Dialog Bisik", content: chosenHook },
+        { angleType: "🤫 Mengaku Je La", content: `Jujur I nak mengaku satu benda: I penat gila bila kena hadap isu ${resolvedPain} ni hari-hari tanpa penyelesaian.` },
+        { angleType: "⚡ Realiti Terang", content: `Kebenaran pahit yang ramai orang elak nak cakap: selagi kita tak selesaikan isu ${resolvedPain}, selagi tu hidup kita rasa serabut.` }
+      ];
+
+      if (format === 'single') {
+        const singleContent = `${chosenHook}\n\nHakikatnya, bila kita hadap isu ${resolvedPain}, kita bukan tak cuba cari jalan. Tapi bila tersalah guna cara, badan dengan emosi kita yang makin terkikis.\n\nSebab tu ${cleanProd} ni direka khas untuk selesaikan isu ni direct to the point—supaya you boleh dapat ${resolvedDream} tanpa rasa serabut lagi.\n\nUntuk ${cleanAvatar} yang nak settlekan masalah ni dari sekarang, jom check link kat bio I sementara promosi masih dibuka! ✨`;
+
+        return {
+          hookTitle: `Single Post: ${cleanProd}`,
+          formatType: "single",
+          targetAvatar: cleanAvatar,
+          hookVariants,
+          posts: [{ postIndex: 1, phaseTag: `FYP Shot • ${cleanProd.toUpperCase()}`, content: singleContent }]
+        };
+      }
+
+      return {
+        hookTitle: `Thread: Sembang ${cleanAvatar}`,
+        formatType: "thread",
+        targetAvatar: cleanAvatar,
+        hookVariants,
+        posts: [
+          { postIndex: 1, phaseTag: `1/5 • Detik Sentap`, content: chosenHook },
+          { postIndex: 2, phaseTag: "2/5 • Stress Sebenar", content: p2Content },
+          { postIndex: 3, phaseTag: "3/5 • Detik Fed Up", content: p3Content },
+          { postIndex: 4, phaseTag: "4/5 • Cara Settle & Rahsia", content: `Sebab tu bila jumpa ${cleanProd} ni, I rasa macam lega gila. Takde sembang kencang janji bulan bintang, tapi benda ni memang direct to the point dan mudah nak amalkan.\n\nBila kita guna benda yang tepat, apa yang kita impikan selama ni—${resolvedDream}—tercapai sendiri tanpa drama lagi.` },
+          { postIndex: 5, phaseTag: "5/5 • Kesimpulan & CTA", content: `So untuk ${cleanAvatar} yang tengah hadap struggle yang sama sekarang: stop buang masa bertahan dengan benda yang buat you stress hari-hari.\n\nCuba switch ke ${cleanProd} sekarang, tengok sendiri beza dia. Link ada kat bio I, pergi usha cepat sebelum stok promosi habis ya! 🔥✨` }
+        ]
+      };
+    }
+
+    const POST_COLOR_THEMES = [
+      { bg: 'bg-sprinkles-pink', text: 'text-white' },
+      { bg: 'bg-sprinkles-orange', text: 'text-white' },
+      { bg: 'bg-sprinkles-yellow', text: 'text-sprinkles-dark' },
+      { bg: 'bg-sprinkles-mint', text: 'text-sprinkles-dark' },
+      { bg: 'bg-sprinkles-blue', text: 'text-white' }
+    ];
+
+    function renderLaserCards(data) {
+      const container = document.getElementById('cardsList');
+      const placeholder = document.getElementById('emptyStatePlaceholder');
+      if (placeholder) placeholder.classList.add('hidden');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!data || !Array.isArray(data.posts)) return;
+
+      data.posts.forEach((post, index) => {
+        const textVal = String(post.content || '');
+        const wordCount = textVal.trim() ? textVal.trim().split(/\s+/).filter(Boolean).length : 0;
+        const colorTheme = POST_COLOR_THEMES[index % POST_COLOR_THEMES.length];
+
+        const card = document.createElement('div');
+        card.className = "pop-card rounded-3xl p-5 sm:p-6 bg-white space-y-3";
+
+        let hookVariantsToolbar = "";
+        if (index === 0 && Array.isArray(data.hookVariants) && data.hookVariants.length > 0) {
+          hookVariantsToolbar = `
+            <div class="pt-3 border-t-2 border-sprinkles-dark/15 flex flex-wrap items-center gap-1.5">
+              <span class="text-xs font-black text-sprinkles-dark flex items-center gap-1">
+                🔄 Tukar Hook:
+              </span>
+              ${data.hookVariants.map((variant, vIdx) => `
+                <button 
+                  type="button" 
+                  onclick="switchLaserHookVariant(${vIdx})" 
+                  class="pop-btn px-2.5 py-1 rounded-xl text-xs font-extrabold bg-sprinkles-lilac text-sprinkles-dark hover:bg-sprinkles-pink hover:text-white transition">
+                  ${escapeHtml(variant.angleType)}
+                </button>
+              `).join('')}
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between pb-2 border-b-2 border-sprinkles-dark/15">
+            <div class="flex items-center space-x-2">
+              <span class="px-3 py-1 rounded-full text-xs font-black border border-sprinkles-dark ${colorTheme.bg} ${colorTheme.text}">
+                ${escapeHtml(post.phaseTag || `Pos ${index + 1}`)}
+              </span>
+              <span class="text-xs font-bold text-sprinkles-darkSoft">${wordCount} patah perkataan</span>
+            </div>
+            <button 
+              type="button" 
+              onclick="copySinglePost(${index}, this)" 
+              class="pop-btn text-xs px-3 py-1.5 rounded-xl bg-sprinkles-lilac hover:bg-sprinkles-yellow text-sprinkles-dark transition font-black flex items-center gap-1">
+              <span>📋</span>
+              <span>Salin</span>
+            </button>
+          </div>
+
+          <div id="postContent_${index}" class="text-xs sm:text-sm text-sprinkles-dark font-extrabold leading-relaxed whitespace-pre-line">
+            ${escapeHtml(textVal)}
+          </div>
+
+          ${hookVariantsToolbar}
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function switchLaserHookVariant(idx) {
+      if (!STATE.laser.currentResults?.hookVariants?.[idx]) return;
+      const chosen = STATE.laser.currentResults.hookVariants[idx];
+      STATE.laser.currentResults.posts[0].content = chosen.content;
+      STATE.laser.currentResults.posts[0].phaseTag = `1/5 • Detik Sentap (${chosen.angleType})`;
+      renderLaserCards(STATE.laser.currentResults);
+      showToast(`Hook ditukar kepada ${chosen.angleType}! ✨`, "info");
+    }
+
+    function copySinglePost(index, btnElement) {
+      const el = document.getElementById(`postContent_${index}`);
+      if (!el) return;
+      copyTextToClipboard(el.innerText);
+      const original = btnElement.innerHTML;
+      btnElement.innerHTML = `✅ Disalin!`;
+      setTimeout(() => { btnElement.innerHTML = original; }, 1500);
+      showToast(`Pos #${index + 1} disalin!`, "success");
+    }
+
+    function copyAllThreadToClipboard() {
+      if (!STATE.laser.currentResults?.posts) return;
+      const fullText = STATE.laser.currentResults.posts.map(p => `${p.phaseTag}\n\n${p.content}`).join('\n\n====================\n\n');
+      copyTextToClipboard(fullText);
+      const btn = document.getElementById('copyAllBtn');
+      if (btn) {
+        const orig = btn.innerHTML;
+        btn.innerHTML = `✅ Disalin!`;
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      }
+      showToast("Semua pos disalin ke clipboard!", "success");
+    }
+
+    /* ===============================================================
+       MODULE 2: COMMENT MAGNET & STEALTH PLUG
+       =============================================================== */
+    function selectMagnetFlavor(flavorKey, el) {
+      STATE.magnet.flavor = flavorKey;
+      document.querySelectorAll('.magnet-flavor').forEach(btn => {
+        btn.className = "magnet-flavor pop-btn px-2.5 py-2 rounded-xl text-[11px] font-black bg-white text-sprinkles-dark hover:bg-sprinkles-yellow/40 text-center";
+      });
+      if (el) el.className = "magnet-flavor active pop-btn px-2.5 py-2 rounded-xl text-[11px] font-black bg-sprinkles-dark text-white text-center";
+      
+      if (STATE.magnet.currentResults.length > 0) {
+        renderMagnetCards(STATE.magnet.currentResults, flavorKey);
+      }
+    }
+
+    function handleMagnetGenerateClick(e) {
+      if (e) {
+        e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      try {
+        triggerMagnetGeneration().catch(() => executeSafeTurboMagnetFallback());
+      } catch (err) {
+        executeSafeTurboMagnetFallback();
+      }
+      return false;
+    }
+
+    function executeSafeTurboMagnetFallback() {
+      const topic = (document.getElementById('magnetTopicInput')?.value || '').trim() || 'isu harian';
+      const tribe = (document.getElementById('magnetTribeInput')?.value || '').trim() || "orang ramai";
+      const product = (document.getElementById('magnetProductInput')?.value || '').trim() || topic;
+      const fallback = normalizeMagnetData(generateViaTurboMagnet(topic, tribe, product));
+      STATE.magnet.currentResults = fallback;
+      renderMagnetCards(fallback, STATE.magnet.flavor);
+      setMagnetLoadingState(false);
+      showToast("Comment Magnet sedia diguna! ⚡", "success");
+    }
+
+    async function triggerMagnetGeneration() {
+      const topic = (document.getElementById('magnetTopicInput')?.value || '').trim();
+      const tribe = (document.getElementById('magnetTribeInput')?.value || '').trim() || "orang ramai";
+      const product = (document.getElementById('magnetProductInput')?.value || '').trim() || topic;
+
+      if (!topic) {
+        showToast("Sila masukkan topik atau apa yang you nak borak dahulu!", "error");
+        return;
+      }
+
+      setMagnetLoadingState(true);
+
+      try {
+        let rawResults = [];
+        let isUsingGemini = false;
+        let activeModel = '';
+
+        if (STATE.apiKey) {
+          try {
+            showToast("🟢 Memanggil Gemini Live AI...", "info");
+            const res = await generateViaGeminiMagnet(topic, tribe, product);
+            rawResults = res.parsed;
+            activeModel = res.modelName;
+            isUsingGemini = true;
+          } catch (e) {
+            rawResults = generateViaTurboMagnet(topic, tribe, product);
+          }
+        } else {
+          await new Promise(r => setTimeout(r, 150));
+          rawResults = generateViaTurboMagnet(topic, tribe, product);
+        }
+
+        const safeResults = normalizeMagnetData(rawResults);
+        STATE.magnet.currentResults = safeResults;
+        renderMagnetCards(safeResults, STATE.magnet.flavor);
+        
+        const badge = document.getElementById('magnetEngineBadge');
+        if (badge) {
+          badge.textContent = isUsingGemini ? `Live Gemini AI (${activeModel})` : "Turbo Engine";
+          badge.className = isUsingGemini 
+            ? "text-[10px] px-2 py-0.5 rounded-full bg-sprinkles-mint text-sprinkles-dark font-black border border-sprinkles-dark"
+            : "text-[10px] px-2 py-0.5 rounded-full bg-sprinkles-yellow text-sprinkles-dark font-black border border-sprinkles-dark";
+        }
+
+        showToast(isUsingGemini ? "🔥 6 Comment Magnet dari Gemini Live AI!" : "6 Comment Magnet dari Turbo Engine!", "success");
+      } catch (err) {
+        executeSafeTurboMagnetFallback();
+      } finally {
+        setMagnetLoadingState(false);
+      }
+    }
+
+    function setMagnetLoadingState(isLoading) {
+      STATE.magnet.isGenerating = isLoading;
+      const btn = document.getElementById('generateMagnetBtn');
+      const btnText = document.getElementById('generateMagnetBtnText');
+      if (!btn || !btnText) return;
+      if (isLoading) {
+        btn.disabled = true;
+        btn.classList.add('opacity-75', 'cursor-wait');
+        btnText.innerHTML = `⏳ Sedang Merangka...`;
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('opacity-75', 'cursor-wait');
+        btnText.textContent = "Jana Comment Magnet + Komen Pin";
+      }
+    }
+
+    async function generateViaGeminiMagnet(topic, tribe, product) {
+      const systemPrompt = `Anda adalah pakar Viral Growth Media Sosial (Threads & TikTok Malaysia).
+Hasilkan soalan pancingan bual santai harian Malaysia rojak. DILARANG GUNA BAHASA INDONESIA ATAU AYAT SASTERA BUKU TEKS.
+Gunakan perkataan harian yang natural: 'korang', 'weh', 'benda ni', 'penat', 'stress', 'chill', 'settle'.
+DILARANG SAMA SEKALI MENGELUARKAN SEBARANG AKSARA CINA / KANJI / MANDARIN / SIMBOL ASING (SEPERTI 碌, 的, 了). WAJIB 100% HURUF RUMI (LATIN) BAHASA MELAYU & ENGLISH DAN EMOJI SAHAJA.
+FORMAT JSON: Gunakan tanda petik tunggal (') di dalam teks dialog, BUKAN tanda petik berganda (").
+Fokus 100% kepada topik "${topic}" dan produk "${product}".
+WAJIB balas dalam format JSON SAHAJA.`;
+
+      const userInstruction = `Topik Perbualan: "${topic}"
+Tribe Sasaran: "${tribe}"
+Produk Yang Nak Diselit Di Komen: "${product}"
+
+Hasilkan 6 kategori magnet ini dalam format JSON:
+1. debate (Korang Team Mana?)
+2. confession (Mengaku Je La)
+3. crowdsource (Tanya Pendapat Korang)
+4. rant (Geram Betul Rasa)
+5. unpopular (Ramai Elak Cakap Ni)
+6. am_i_only_one ("I Sorang Je Ke?")
+
+Format JSON:
+[
+  {
+    "category": "debate",
+    "badgeTitle": "🥊 Korang Team Mana?",
+    "psychologyWhy": "Orang pantang bila tabiat harian mereka dicabar.",
+    "mainPost": "Ayat pos utama...",
+    "stealthPinComment": "Skrip komen pin pertama...",
+    "crowdPredictions": ["Jawapan netizen 1", "Jawapan netizen 2"]
+  }
+]`;
+
+      return await callGeminiGenerate(userInstruction, systemPrompt, STATE.apiKey);
+    }
+
+    function generateViaTurboMagnet(topic, tribe, product) {
+      const cleanTopic = String(topic || '').trim();
+      const cleanTribe = String(tribe || '').trim();
+      const cleanProd = String(product || '').trim();
+
+      return [
+        {
+          category: "debate",
+          badgeTitle: "🥊 Korang Team Mana?",
+          psychologyWhy: "Orang pantang bila tabiat harian mereka dicabar.",
+          mainPost: `Tolong settlekan perdebatan ni jap:\n\nUntuk ${cleanTribe}, kalau bab ${cleanTopic} ni korang jenis yang lebih rela cari jalan cepat yang praktikal, ke jenis sanggup redah cara susah asalkan puas hati?\n\nSebab tadi I borak dengan kawan, pendapat kitorang bertentangan gila. Korang team mana sebenarnya?`,
+          stealthPinComment: `📌 Update lepas baca komen korang: Ramai rupanya team nak mudah! I pun dulu pening kepala hadap benda ni, sampailah I try switch ke ${cleanProd}. Sumpah jimat separuh masa hidup. Sape nak usha I letak link kat bio ya! 🤍`,
+          crowdPredictions: [
+            `"Team nombor 1! Tak kuasa nak serabutkan kepala zaman sekarang 😂"`,
+            `"Bagi I tengok keadaan, tapi kalau ada shortcut memang I pilih yang tu."`
+          ]
+        },
+        {
+          category: "confession",
+          badgeTitle: "🤫 Mengaku Je La...",
+          psychologyWhy: "Bila kita berani buka rahsia, orang lain rasa selamat untuk ikut serta.",
+          mainPost: `Jujur lah kan, ${cleanTribe} pernah tak rasa macam ni senyap-senyap...\n\nBila hadap situasi ${cleanTopic}, korang buat-buat tenang depan orang lain, tapi dalam hati rasa serabut dan fed up gila sebab tak tahu nak buat macam mana?\n\nKe I sorang je yang ada perasaan macam ni? Tolong mengaku cepat haha.`,
+          stealthPinComment: `📌 Lega gila baca reply korang, ingatkan I sorang yang struggle macam tu hahah! By the way, sebab dah penat nak hadap benda ni la I nekad pakai ${cleanProd}. Terus settle masalah. Link ada kat profil kalau nak usha! ✨`,
+          crowdPredictions: [
+            `"Weh sumpah relate! Selalu rasa nak give up bila jadi macam tu 😂"`,
+            `"Ingatkan aku sorang je, rupanya ramai geng!"`
+          ]
+        },
+        {
+          category: "crowdsource",
+          badgeTitle: "🧠 Minta Pendapat Netizen",
+          psychologyWhy: "Netizen suka bila kepakaran atau pengalaman mereka dihargai.",
+          mainPost: `Nak minta pendapat ikhlas daripada ${cleanTribe} yang dah berpengalaman...\n\nKalau korang diberi pilihan untuk perbaiki satu benda pasal ${cleanTopic}, apa nasihat paling mahal yang korang wish korang tahu dari dulu lagi?\n\nDrop tips korang kat bawah, I nak baca dan hadam sorang-sorang.`,
+          stealthPinComment: `📌 Terima kasih banyak untuk semua tips! Banyak sangat ilmu baru. Rata-rata ramai sebut pasal cara asas. That's why I prefer guna ${cleanProd} sekarang sebab dia memang cut the crap terus. Boleh check kat link bio kalau nak reference! 🫶`,
+          crowdPredictions: [
+            `"Paling penting jangan paksa diri, kena guna cara yang betul..."`,
+            `"Fokus pada benda yang konsisten je, jangan rumitkan keadaan."`
+          ]
+        },
+        {
+          category: "rant",
+          badgeTitle: "💔 Geram Bersama",
+          psychologyWhy: "Rasa geram pada masalah yang sama adalah gam sosial paling kuat.",
+          mainPost: `Boleh tak kita sepakat satu benda ni?\n\nBenda paling annoying gila bila kita tengah cuba handle ${cleanTopic} elok-elok, tiba-tiba ada je halangan kecil yang buat semua plan kita ke laut.\n\nApa detik paling buat korang rasa nak jerit bila kena benda ni? Luahkan kat sini, biar lega sikit dada haha.`,
+          stealthPinComment: `📌 Komen korang semua memang mewakili isi hati! Sebab geram macam ni la I terus grab ${cleanProd}. Alhamdulillah sejak guna ni, hidup rasa aman sikit takda drama lagi. Link ada kat bio tau! ❤`,
+          crowdPredictions: [
+            `"Paling sakit hati bila kita dah penat-penat usaha tapi hasilnya ke laut 😭"`,
+            `"Betul weh! Setiap kali jadi macam tu rasa nak give up terus."`
+          ]
+        },
+        {
+          category: "unpopular",
+          badgeTitle: "🛑 Ramai Elak Cakap Ni",
+          psychologyWhy: "Mencabar norma mencetus rasa ingin tahu yang kuat.",
+          mainPost: `Mungkin ramai tak setuju dengan I, tapi benda ni kena cakap jugak:\n\nRamai ${cleanTribe} bazir masa dan tenaga pasal ${cleanTopic} bukan sebab diri tu tak mampu, tapi sebab korang abaikan langkah paling asas sekali.\n\nKorang rasa apa mitos paling merepek orang selalu percaya pasal benda ni?`,
+          stealthPinComment: `📌 Korang jangan salah faham pulak, I bukan nak judge tapi kesian tengok ramai bazir tenaga. Sebab tu kalau tanya I, invest je sekali kat ${cleanProd} yang memang terus target punca masalah. Senang cerita. Check link bio ya kalau nak details! 💡`,
+          crowdPredictions: [
+            `"Setuju sangat! Ramai orang cari cara susah padahal ada cara mudah."`,
+            `"Benda ni kalau tak kena batang hidung sendiri memang tak sedar."`
+          ]
+        },
+        {
+          category: "am_i_only_one",
+          badgeTitle: "🎭 'I Sorang Je Ke?'",
+          psychologyWhy: "Fitrah manusia yang taknak rasa keseorangan dalam sesuatu masalah.",
+          mainPost: `Please tell me I'm not the only one...\n\nSetiap kali fikir pasal ${cleanTopic}, korang rasa macam ada satu beban mental yang buat korang bertangguh nak settlekan sampai berhari-hari?\n\nKe korang jenis yang terus jalan tanpa fikir panjang? Share sikit cara korang lawan rasa ni.`,
+          stealthPinComment: `📌 Rupanya ramai gila sejenis macam I haha! Apa yang tolong I keluar dari loop bertangguh ni bila I simplify hidup guna ${cleanProd}. Terus auto-jalan. Yang nak tahu lebih lanjut boleh jenguk link bio! 🌸`,
+          crowdPredictions: [
+            `"Sumpah sama! Kadang berminggu peram benda tu baru nak gerak 😂"`,
+            `"Aku kalau tak terdesak memang tak jalan haha."`
+          ]
+        }
+      ];
+    }
+
+    function renderMagnetCards(list, filterFlavor = 'all') {
+      const container = document.getElementById('magnetResultsContainer');
+      const emptyState = document.getElementById('magnetEmptyState');
+      if (emptyState) emptyState.classList.add('hidden');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const safeList = Array.isArray(list) ? list : [];
+      const filtered = (filterFlavor === 'all') 
+        ? safeList 
+        : safeList.filter(item => item.category === filterFlavor);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="pop-card rounded-3xl p-8 text-center text-xs font-bold text-sprinkles-darkSoft bg-white">
+            Tiada magnet dalam kategori ini. Sila pilih "Jana Semua" semula.
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = "pop-card rounded-3xl p-5 sm:p-6 bg-white space-y-4";
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between pb-3 border-b-2 border-sprinkles-dark/15 flex-wrap gap-2">
+            <span class="px-3 py-1 rounded-full text-xs font-black bg-sprinkles-lilac text-sprinkles-dark border border-sprinkles-dark">
+              ${escapeHtml(item.badgeTitle)}
+            </span>
+            <span class="text-[11px] font-bold text-sprinkles-darkSoft italic">
+              🧠 ${escapeHtml(item.psychologyWhy)}
+            </span>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-sprinkles-dark flex items-center gap-1">
+                <span>📱</span> Post Utama (Pancing Komen Alami):
+              </span>
+              <button 
+                type="button"
+                onclick="copyMagnetMainByIndex(${index}, this)" 
+                class="pop-btn px-2.5 py-1 rounded-xl bg-sprinkles-yellow text-sprinkles-dark text-[11px] font-black flex items-center gap-1">
+                <span>📋</span> Salin Post
+              </button>
+            </div>
+            <div id="magnetMain_${index}" class="p-3.5 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark/30 text-xs sm:text-sm font-extrabold text-sprinkles-dark whitespace-pre-line leading-relaxed">
+              ${escapeHtml(item.mainPost)}
+            </div>
+          </div>
+
+          <div class="space-y-1.5 p-3.5 rounded-2xl bg-sprinkles-mint/15 border-2 border-sprinkles-mint/60">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black text-sprinkles-dark flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-sprinkles-mint inline-block"></span>
+                <span>📌 Komen Pin Pertama (Stealth Jualan Halus):</span>
+              </span>
+              <button 
+                type="button"
+                onclick="copyMagnetPinByIndex(${index}, this)" 
+                class="pop-btn px-2.5 py-1 rounded-xl bg-sprinkles-mint text-sprinkles-dark text-[11px] font-black flex items-center gap-1">
+                <span>📋</span> Salin Pin
+              </button>
+            </div>
+            <p class="text-[11px] font-bold text-sprinkles-darkSoft/80">
+              *Tampal komen ini bila pos dah mula dapat 5-10 komen organik, kemudian 'Pin' komen ini di bahagian atas!
+            </p>
+            <div id="magnetPin_${index}" class="text-xs sm:text-sm font-extrabold text-sprinkles-dark whitespace-pre-line leading-relaxed pt-1">
+              ${escapeHtml(item.stealthPinComment)}
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <span class="text-[11px] font-black text-sprinkles-blue flex items-center gap-1">
+              <span>🔮</span> Ramalan Apa Netizen Bakal Komen:
+            </span>
+            <div class="flex flex-wrap gap-1.5">
+              ${(item.crowdPredictions || []).map(cp => `
+                <span class="px-2.5 py-1 rounded-xl bg-sprinkles-cream border border-sprinkles-dark/20 text-[11px] font-bold text-sprinkles-darkSoft">
+                  ${escapeHtml(cp)}
+                </span>
+              `).join('')}
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-sprinkles-dark/15 flex items-center justify-between">
+            <button 
+              type="button"
+              onclick="saveMagnetToLibrary(${index})" 
+              class="pop-btn px-3 py-1.5 rounded-xl bg-sprinkles-lilac text-sprinkles-dark text-xs font-black flex items-center gap-1">
+              <span>🔖</span> Simpan Magnet Ini
+            </button>
+            <button 
+              type="button"
+              onclick="copyBothMagnetParts(${index}, this)" 
+              class="pop-btn px-3 py-1.5 rounded-xl bg-sprinkles-blue text-white text-xs font-black flex items-center gap-1">
+              <span>📋</span> Salin Semua (Post + Komen Pin)
+            </button>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function copyMagnetMainByIndex(index, btn) {
+      const item = STATE.magnet.currentResults[index];
+      if (!item) return;
+      copyTextToClipboard(item.mainPost);
+      const orig = btn.innerHTML;
+      btn.innerHTML = `✅ Disalin!`;
+      setTimeout(() => { btn.innerHTML = orig; }, 1500);
+      showToast("Post Utama disalin!", "success");
+    }
+
+    function copyMagnetPinByIndex(index, btn) {
+      const item = STATE.magnet.currentResults[index];
+      if (!item) return;
+      copyTextToClipboard(item.stealthPinComment);
+      const orig = btn.innerHTML;
+      btn.innerHTML = `✅ Disalin!`;
+      setTimeout(() => { btn.innerHTML = orig; }, 1500);
+      showToast("Komen Pin disalin!", "success");
+    }
+
+    function copyBothMagnetParts(index, btn) {
+      const item = STATE.magnet.currentResults[index];
+      if (!item) return;
+
+      const combined = `[POST UTAMA]\n${item.mainPost}\n\n====================\n\n[STEALTH PIN COMMENT]\n${item.stealthPinComment}`;
+      copyTextToClipboard(combined);
+
+      const orig = btn.innerHTML;
+      btn.innerHTML = `✅ Semua Disalin!`;
+      setTimeout(() => { btn.innerHTML = orig; }, 1500);
+      showToast("Post Utama + Komen Pin disalin!", "success");
+    }
+
+    function saveMagnetToLibrary(index) {
+      const item = STATE.magnet.currentResults[index];
+      if (!item) return;
+
+      const newItem = {
+        id: 'mag_' + Date.now(),
+        date: new Date().toLocaleDateString('ms-MY', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+        title: item.badgeTitle,
+        avatar: document.getElementById('magnetTribeInput')?.value || "Comment Magnet",
+        format: "magnet",
+        payload: item
+      };
+
+      STATE.savedLibrary.unshift(newItem);
+      if (STATE.savedLibrary.length > 40) STATE.savedLibrary.pop();
+      SafeStorage.setItem('laser_saved_scripts', JSON.stringify(STATE.savedLibrary));
+      updateLibraryBadge();
+      showToast("Comment Magnet disimpan ke Pustaka! 🔖", "success");
+    }
+
+    /* ===============================================================
+       MODULE 3: 1-SENTENCE ANGLE FINDER
+       =============================================================== */
+    function fillAngleInput(text) {
+      const input = document.getElementById('angleQuickProductInput');
+      if (input) input.value = text;
+      handleAngleSearchClick();
+    }
+
+    function handleAngleSearchClick(e) {
+      if (e) {
+        e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      try {
+        triggerAngleFinderGeneration().catch(() => executeSafeAngleFallback());
+      } catch (err) {
+        executeSafeAngleFallback();
+      }
+      return false;
+    }
+
+    function executeSafeAngleFallback() {
+      const rawInput = (document.getElementById('angleQuickProductInput')?.value || '').trim() || 'produk harian';
+      const angles = normalizeAngleData(generateDynamicSemanticAngles(rawInput), rawInput);
+      STATE.angles.currentList = angles;
+      STATE.angles.currentProductRaw = rawInput;
+      renderAngleCards(angles, rawInput);
+      setAngleLoadingState(false);
+      showToast("Sudut cerita sedia diguna! ⚡", "success");
+    }
+
+    async function triggerAngleFinderGeneration() {
+      const rawInput = (document.getElementById('angleQuickProductInput')?.value || '').trim();
+      if (!rawInput) {
+        showToast("Sila taip produk atau apa yang you nak jual!", "error");
+        return;
+      }
+
+      setAngleLoadingState(true);
+
+      try {
+        let angles = [];
+        let isUsingGemini = false;
+
+        if (STATE.apiKey) {
+          try {
+            showToast("🟢 Memanggil Gemini Live AI...", "info");
+            const res = await generateViaGeminiAngles(rawInput);
+            angles = res.parsed;
+            isUsingGemini = true;
+          } catch (e) {
+            angles = generateDynamicSemanticAngles(rawInput);
+          }
+        } else {
+          await new Promise(r => setTimeout(r, 150));
+          angles = generateDynamicSemanticAngles(rawInput);
+        }
+
+        const safeAngles = normalizeAngleData(angles, rawInput);
+        STATE.angles.currentList = safeAngles;
+        STATE.angles.currentProductRaw = rawInput;
+        renderAngleCards(safeAngles, rawInput);
+
+        showToast(isUsingGemini ? "✨ 6 Sudut Sembang dari Gemini Live AI!" : "6 Sudut Cerita sedia diguna!", "success");
+      } catch (err) {
+        executeSafeAngleFallback();
+      } finally {
+        setAngleLoadingState(false);
+      }
+    }
+
+    function setAngleLoadingState(isLoading) {
+      STATE.angles.isGenerating = isLoading;
+      const btn = document.getElementById('angleSearchBtn');
+      const btnText = document.getElementById('angleSearchBtnText');
+      if (!btn || !btnText) return;
+      if (isLoading) {
+        btn.disabled = true;
+        btn.classList.add('opacity-75', 'cursor-wait');
+        btnText.innerHTML = `⏳ Mencari...`;
+      } else {
+        btn.disabled = false;
+        btn.classList.remove('opacity-75', 'cursor-wait');
+        btnText.textContent = "Cari Sudut";
+      }
+    }
+
+    async function generateViaGeminiAngles(rawInput) {
+      const systemPrompt = `Anda adalah pakar Viral Hook & Story Angles di Malaysia (Threads & TikTok).
+Tulis 6 sudut cerita manusia yang segar, santai dan menggunakan gaya SEMBANG ROJAK MALAYSIA.
+FOKUS TEPAT KEPADA FUNGSI PRODUK: "${rawInput}".
+DILARANG GUNA BAHASA INDONESIA ATAU AYAT SASTERA KARANGAN BUKU TEKS.
+DILARANG SAMA SEKALI MENGELUARKAN SEBARANG AKSARA CINA / KANJI / MANDARIN / SIMBOL ASING (SEPERTI 碌, 的, 了). WAJIB 100% HURUF RUMI (LATIN) BAHASA MELAYU & ENGLISH DAN EMOJI SAHAJA.
+FORMAT JSON: Gunakan tanda petik tunggal (') di dalam teks, BUKAN tanda petik berganda (").
+WAJIB balas dalam format JSON SAHAJA.`;
+
+      const userInstruction = `Apa yang nak dijual: "${rawInput}"
+
+Hasilkan 6 Sudut Cerita Manusia (JSON Array):
+[
+  {
+    "angleNum": "01",
+    "tag": "Nama Sudut Catchy",
+    "color": "bg-sprinkles-pink text-white",
+    "summary": "Penerangan ringkas...",
+    "hookSnippet": "'Ayat pembukaan sembang...'"
+  }
+]`;
+
+      return await callGeminiGenerate(userInstruction, systemPrompt, STATE.apiKey);
+    }
+
+    function generateDynamicSemanticAngles(rawInput) {
+      const lower = String(rawInput || '').toLowerCase();
+      const cleanInput = String(rawInput || '').trim();
+
+      const isEduGameOrPreschool = (lower.includes('edu game') || lower.includes('puzzle') || lower.includes('montessori') || lower.includes('tadika') || lower.includes('fonik') || lower.includes('screen time')) && !lower.includes('exam');
+      const isKidNutrition = (lower.includes('vitamin') || lower.includes('gummy') || lower.includes('sayur') || lower.includes('selera makan')) && !isEduGameOrPreschool;
+
+      if (isEduGameOrPreschool) {
+        return [
+          {
+            angleNum: "01",
+            tag: "Tantrum Bila Phone Diambil",
+            color: "bg-sprinkles-pink text-white",
+            summary: "Detik emosi anak mengamuk bila skrin telefon ditutup, mak ayah rasa bersalah dada.",
+            hookSnippet: `"Bila minta phone balik petang tadi, anak terus hempas badan menangis. Rasa ralat sangat bila sedar gajet dah mula kawal emosi dia..."`
+          },
+          {
+            angleNum: "02",
+            tag: "Bosan Tengok Buku Biasa",
+            color: "bg-sprinkles-orange text-white",
+            summary: "Kanak-kanak prasekolah memerlukan stimulasi sensori bermain, bukan paksaan hafal kaku.",
+            hookSnippet: `"Ajak duduk belajar huruf 5 minit anak dah mengelak lari. Budak umur ni fitrah dia memang belajar sambil pegang dan main..."`
+          },
+          {
+            angleNum: "03",
+            tag: "Panik Anak Lambat Kenal Fonik",
+            color: "bg-sprinkles-yellow text-sprinkles-dark",
+            summary: "Perasaan risau bila anak sebaya dah pandai sebut bunyi huruf tapi anak sendiri masih leka scroll skrin.",
+            hookSnippet: `"Bila dengar anak kawan dah lancar kenal bunyi huruf, kita balik rumah tengok anak sendiri termenung panik senyap-senyap..."`
+          },
+          {
+            angleNum: "04",
+            tag: "Leka Main Sambil Belajar",
+            color: "bg-sprinkles-mint text-sprinkles-dark",
+            summary: "Kelegaan melihat anak fokus menyusun puzzle dan bahan interaktif tanpa merengek minta phone.",
+            hookSnippet: `"Momen paling lega: nampak anak duduk senyap atas karpet fokus susun blok sambil sebut warna ceria tanpa minta gajet langsung..."`
+          },
+          {
+            angleNum: "05",
+            tag: "Selamatkan Daya Fokus Si Kecil",
+            color: "bg-sprinkles-blue text-white",
+            summary: "Kepentingan mengurangkan screen time sebelum anak melangkah ke alam darjah 1.",
+            hookSnippet: `"Sebelum terlambat dan otak dia terbiasa dengan video laju, baik kita latih daya fokus tangan dan mata dia dari sekarang..."`
+          },
+          {
+            angleNum: "06",
+            tag: "Sembang Jujur Mak-Mak Tadika",
+            color: "bg-sprinkles-lilac text-sprinkles-dark",
+            summary: "Pengakuan jujur bahawa semua mak ayah bergelut dengan screen time, yang penting cara alihkan perhatian.",
+            hookSnippet: `"Jangan rasa you mak yang teruk bila terpaksa bagi phone dulu. Sekarang masa terbaik untuk kita tukar tabiat tu pelan-pelan..."`
+          }
+        ];
+      }
+
+      if (isKidNutrition) {
+        return [
+          {
+            angleNum: "01",
+            tag: "Pinggan Nasi Tak Berusik",
+            color: "bg-sprinkles-pink text-white",
+            summary: "Menyentuh rasa sayu mak ayah bila anak tolak makanan sihat yang dimasak berjam-jam.",
+            hookSnippet: `"Penat berdiri kat dapur masak lauk sihat, tapi bila suap anak tolak sambil tutup mulut rapat. Rasa nak menangis duduk tepi sinki..."`
+          },
+          {
+            angleNum: "02",
+            tag: "Risau Berat Badan Susut",
+            color: "bg-sprinkles-orange text-white",
+            summary: "Kebimbangan ibu bapa melihat anak memilih makan dan susut berat badan.",
+            hookSnippet: `"Bila timbang berat badan anak bulan ni tetap tak naik, hati mak mana yang tak gundah tengok lengan kecil dia..."`
+          },
+          {
+            angleNum: "03",
+            tag: "Antibodi Kerap Demam",
+            color: "bg-sprinkles-yellow text-sprinkles-dark",
+            summary: "Kesan kurang zat sayur dan vitamin yang buat anak cepat dijangkiti selsema.",
+            hookSnippet: `"Bulan ni je dah 2 kali anak berulang selsema dan demam. Kita tahu sebab dia susah sangat nak telan sayur dan zat buah..."`
+          },
+          {
+            angleNum: "04",
+            tag: "Bukan Paksa, Tapi Tukar Cara",
+            color: "bg-sprinkles-mint text-sprinkles-dark",
+            summary: "Menyedarkan ibu bapa bahawa kanak-kanak lebih mudah menerima khasiat dalam bentuk yang sedap dan menyeronokkan.",
+            hookSnippet: `"Daripada berperang paksa anak telan sayur pahit sampai dia trauma, lebih baik bagi dia kunyah benda sedap yang penuh zat..."`
+          },
+          {
+            angleNum: "05",
+            tag: "Bila Anak Minta Sendiri",
+            color: "bg-sprinkles-blue text-white",
+            summary: "Detik kelegaan apabila anak sendiri yang meminta makanan berkhasiat tanpa perlu disuruh.",
+            hookSnippet: `"Momen paling membahagiakan: anak sendiri yang datang minta 'mama nak lagi!'. Terus hilang segala rasa risau mak selama ni..."`
+          },
+          {
+            angleNum: "06",
+            tag: "Sembang Jujur Mak-Mak",
+            color: "bg-sprinkles-lilac text-sprinkles-dark",
+            summary: "Luahan empati sesama ibu yang menghadapi anak cerewet makan (picky eater).",
+            hookSnippet: `"Jangan rasa you gagal jadi mak bila anak susah makan. Ramai mak-mak lalui fasa ni, yang penting kita cari cara bijak..."`
+          }
+        ];
+      }
+
+      return [
+        {
+          angleNum: "01",
+          tag: "Dosa Menangguh",
+          color: "bg-sprinkles-pink text-white",
+          summary: `Membongkar tabiat suka menangguh keputusan mengenai ${cleanInput}.`,
+          hookSnippet: `"Sampai bila nak sedapkan hati dengan ayat 'nantilah bila dah senang sikit baru fikir pasal ${cleanInput}'? Hakikatnya masa terus jalan..."`
+        },
+        {
+          angleNum: "02",
+          tag: "Penat Try Cara Yang Tak Menjadi",
+          color: "bg-sprinkles-orange text-white",
+          summary: "Mengiktiraf penat lelah prospek sebelum ini yang tidak mendatangkan hasil.",
+          hookSnippet: `"Bukan you tak cuba weh. You dah try macam-macam pasal ${cleanInput} ni sampai penat, tapi bila guna cara yang serabut, memang cepat fed up..."`
+        },
+        {
+          angleNum: "03",
+          tag: "Momen Tersentap Sendiri",
+          color: "bg-sprinkles-yellow text-sprinkles-dark",
+          summary: "Detik tepat di mana prospek sedar keadaan tidak boleh dibiarkan lagi.",
+          hookSnippet: `"Masa duduk lepak petang tadi sambil fikir pasal ${cleanInput}, baru I tersentap: kalau I tak ubah cara sekarang, tahun depan I dok hadap benda sama lagi..."`
+        },
+        {
+          angleNum: "04",
+          tag: "Kebenaran Pahit Yang Ramai Elak Cakap",
+          color: "bg-sprinkles-mint text-sprinkles-dark",
+          summary: "Mencabar salah faham umum audiens dengan fakta yang menyedarkan.",
+          hookSnippet: `"Kebenaran pahit yang ramai orang elak nak cakap pasal ${cleanInput}: masalahnya bukan takde masa, tapi kita asyik tangguh nak start langkah pertama..."`
+        },
+        {
+          angleNum: "05",
+          tag: "Benda Kecik Tapi Serabut Kepala",
+          color: "bg-sprinkles-blue text-white",
+          summary: "Isu yang kelihatan remeh tetapi mencuri ketenangan fikiran setiap hari.",
+          hookSnippet: `"Benda pasal ${cleanInput} ni nampak macam remeh kat luar. Tapi bila hari-hari duk fikir benda sama, mental kita yang letih weh..."`
+        },
+        {
+          angleNum: "06",
+          tag: "Sembang Jujur Depan Member",
+          color: "bg-sprinkles-lilac text-sprinkles-dark",
+          summary: "Gaya luahan peribadi yang telus tanpa ada unsur jualan keras.",
+          hookSnippet: `"Kalau you member rapat I, ni benda pertama I nak pesan pasal ${cleanInput}: stop buang masa dok try cara merepek, fokus satu cara yang dah prove settlekan masalah..."`
+        }
+      ];
+    }
+
+    function renderAngleCards(angles) {
+      const grid = document.getElementById('angleCardsGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const safeAngles = Array.isArray(angles) ? angles : [];
+
+      safeAngles.forEach((angle, index) => {
+        const card = document.createElement('div');
+        card.className = "pop-card rounded-3xl p-5 bg-white space-y-3 flex flex-col justify-between";
+
+        card.innerHTML = `
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-black border border-sprinkles-dark ${angle.color}">
+                Sudut ${angle.angleNum}
+              </span>
+              <span class="text-xs font-black text-sprinkles-darkSoft uppercase tracking-wider">
+                ${escapeHtml(angle.tag)}
+              </span>
+            </div>
+
+            <p class="text-xs font-bold text-sprinkles-darkSoft">
+              ${escapeHtml(angle.summary)}
+            </p>
+
+            <div class="p-3 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark/20 text-xs font-extrabold text-sprinkles-dark italic leading-relaxed">
+              ${escapeHtml(angle.hookSnippet)}
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-sprinkles-dark/15 flex items-center justify-between">
+            <button 
+              type="button"
+              onclick="copyAngleHookByIndex(${index})" 
+              class="pop-btn px-2.5 py-1.5 rounded-xl bg-white text-sprinkles-dark text-xs font-black flex items-center gap-1 hover:bg-sprinkles-lilac/30">
+              <span>📋</span> Salin Hook
+            </button>
+            <button 
+              type="button"
+              onclick="transferAngleByIndex(${index})" 
+              class="pop-btn px-3 py-1.5 rounded-xl bg-sprinkles-pink text-white text-xs font-black flex items-center gap-1">
+              <span>🎯</span> Kembangkan Skrip
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function copyAngleHookByIndex(index) {
+      const angle = STATE.angles.currentList[index];
+      if (!angle) return;
+      copyTextToClipboard(angle.hookSnippet);
+      showToast("Hook disalin! ✨", "success");
+    }
+
+    function transferAngleByIndex(index) {
+      const angle = STATE.angles.currentList[index];
+      if (!angle) return;
+      switchMainTab('laser');
+      const inputProd = document.getElementById('inputProduct');
+      const inputAvatar = document.getElementById('inputAvatar');
+      const inputPain = document.getElementById('inputPain');
+      if (inputProd) inputProd.value = STATE.angles.currentProductRaw || "Produk Pilihan";
+      if (inputAvatar) inputAvatar.value = `Prospek: ${angle.tag}`;
+      if (inputPain) inputPain.value = angle.hookSnippet.replace(/"/g, '');
+      handleGenerateClick();
+      showToast(`Sudut "${angle.tag}" dipindahkan ke Laser Studio!`, "success");
+    }
+
+    /* ===============================================================
+       COMMON UTILITIES (LIBRARY, API, STORAGE)
+       =============================================================== */
+    function saveCurrentToLibrary(type) {
+      if (type === 'laser') {
+        if (!STATE.laser.currentResults) return;
+        const newItem = {
+          id: 'laser_' + Date.now(),
+          date: new Date().toLocaleDateString('ms-MY', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }),
+          title: STATE.laser.currentResults.hookTitle || document.getElementById('inputProduct')?.value || "Skrip Sembang",
+          avatar: STATE.laser.currentResults.targetAvatar || document.getElementById('inputAvatar')?.value || "Prospek",
+          format: STATE.laser.format,
+          payload: JSON.parse(JSON.stringify(STATE.laser.currentResults))
+        };
+        STATE.savedLibrary.unshift(newItem);
+      }
+
+      if (STATE.savedLibrary.length > 40) STATE.savedLibrary.pop();
+      SafeStorage.setItem('laser_saved_scripts', JSON.stringify(STATE.savedLibrary));
+      updateLibraryBadge();
+      showToast("Skrip disimpan ke Pustaka! 🔖", "success");
+    }
+
+    function loadSavedLibraryFromStorage() {
+      try {
+        const stored = SafeStorage.getItem('laser_saved_scripts');
+        if (stored) STATE.savedLibrary = JSON.parse(stored);
+      } catch (e) {
+        STATE.savedLibrary = [];
+      }
+      updateLibraryBadge();
+    }
+
+    function updateLibraryBadge() {
+      const badge = document.getElementById('savedCountBadge');
+      if (badge) badge.textContent = STATE.savedLibrary.length;
+    }
+
+    function openLibraryModal() {
+      renderLibraryItems();
+      const modal = document.getElementById('libraryModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeLibraryModal() {
+      const modal = document.getElementById('libraryModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function renderLibraryItems() {
+      const list = document.getElementById('libraryList');
+      if (!list) return;
+      list.innerHTML = '';
+
+      if (STATE.savedLibrary.length === 0) {
+        list.innerHTML = `
+          <div class="text-center py-8 text-sprinkles-darkSoft text-xs font-bold">
+            <span class="text-3xl mb-2 block">📂</span>
+            Tiada item dalam pustaka anda lagi.
+          </div>
+        `;
+        return;
+      }
+
+      STATE.savedLibrary.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = "p-4 rounded-2xl bg-sprinkles-cream border-2 border-sprinkles-dark space-y-2";
+        
+        const isMagnet = item.format === 'magnet';
+
+        itemEl.innerHTML = `
+          <div class="flex items-start justify-between gap-2">
+            <div>
+              <div class="font-black text-xs sm:text-sm text-sprinkles-dark">${escapeHtml(item.title)}</div>
+              <div class="text-xs text-sprinkles-pink font-extrabold flex items-center gap-1 mt-0.5">
+                <span>🎯</span>
+                <span>${escapeHtml(item.avatar)}</span>
+              </div>
+            </div>
+            <span class="text-[10px] text-sprinkles-darkSoft font-bold">${item.date}</span>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-sprinkles-dark/15 text-xs">
+            <span class="text-[10px] uppercase font-black px-2 py-0.5 rounded-full ${isMagnet ? 'bg-sprinkles-orange text-white' : 'bg-sprinkles-yellow text-sprinkles-dark'} border border-sprinkles-dark">
+              ${isMagnet ? 'Comment Magnet' : (item.format === 'thread' ? '5 Bebenang' : 'Single Post')}
+            </span>
+            <div class="flex items-center gap-2">
+              <button type="button" onclick="restoreLibraryItem('${item.id}')" class="pop-btn px-2.5 py-1 rounded-xl bg-sprinkles-blue text-white text-xs font-black transition flex items-center gap-1">
+                ↗ Buka
+              </button>
+              <button type="button" onclick="deleteLibraryItem('${item.id}')" class="pop-btn px-2 py-1 rounded-xl bg-white text-rose-500 font-black hover:bg-rose-100 transition" title="Padam">
+                🗑
+              </button>
+            </div>
+          </div>
+        `;
+        list.appendChild(itemEl);
+      });
+    }
+
+    function restoreLibraryItem(id) {
+      const item = STATE.savedLibrary.find(i => i.id === id);
+      if (!item) return;
+
+      if (item.format === 'magnet') {
+        switchMainTab('magnet');
+        renderMagnetCards([item.payload], 'all');
+      } else {
+        switchMainTab('laser');
+        STATE.laser.currentResults = item.payload;
+        selectFormat(item.format);
+        renderLaserCards(item.payload);
+        const copyBtn = document.getElementById('copyAllBtn');
+        const saveBtn = document.getElementById('saveToLibBtn');
+        if (copyBtn) {
+          copyBtn.disabled = false;
+          copyBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        }
+        if (saveBtn) {
+          saveBtn.disabled = false;
+          saveBtn.classList.remove('opacity-40', 'cursor-not-allowed');
+        }
+      }
+
+      closeLibraryModal();
+      showToast("Item berjaya dibuka dari pustaka! ✨", "success");
+    }
+
+    function deleteLibraryItem(id) {
+      STATE.savedLibrary = STATE.savedLibrary.filter(i => i.id !== id);
+      SafeStorage.setItem('laser_saved_scripts', JSON.stringify(STATE.savedLibrary));
+      updateLibraryBadge();
+      renderLibraryItems();
+      showToast("Item dipadam.", "info");
+    }
+
+    function clearAllLibrary() {
+      STATE.savedLibrary = [];
+      SafeStorage.removeItem('laser_saved_scripts');
+      updateLibraryBadge();
+      renderLibraryItems();
+      showToast("Pustaka dikosongkan.", "info");
+    }
+
+    function openApiModal() {
+      const input = document.getElementById('apiKeyInput');
+      if (input) input.value = STATE.apiKey;
+      const resBox = document.getElementById('apiTestResult');
+      if (resBox) resBox.classList.add('hidden');
+      const modal = document.getElementById('apiModal');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeApiModal() {
+      const modal = document.getElementById('apiModal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function saveApiKeySettings() {
+      const input = document.getElementById('apiKeyInput');
+      const key = (input ? input.value : '').trim();
+      STATE.apiKey = key;
+      if (key) {
+        SafeStorage.setItem('user_gemini_api_key', key);
+        showToast("Kunci API disimpan! ✨", "success");
+      } else {
+        SafeStorage.removeItem('user_gemini_api_key');
+        SafeStorage.removeItem('user_preferred_gemini_model');
+        STATE.preferredModel = '';
+        STATE.knownWorkingModels = [];
+        showToast("Kunci dipadam. Kembali ke Turbo Engine.", "info");
+      }
+      updateApiKeyStatusIndicator();
+      updateEngineDisplay();
+      closeApiModal();
+    }
+
+    async function testApiKeyValidity(e) {
+      if (e) {
+        e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+
+      const input = document.getElementById('apiKeyInput');
+      const key = (input ? input.value : '').trim();
+      const resultBox = document.getElementById('apiTestResult');
+      if (!resultBox) return false;
+
+      if (!key) {
+        resultBox.className = "text-xs p-3 rounded-2xl bg-rose-100 border-2 border-sprinkles-dark text-rose-800 font-black block";
+        resultBox.textContent = "Sila masukkan kunci API terlebih dahulu.";
+        return false;
+      }
+
+      resultBox.className = "text-xs p-3 rounded-2xl bg-sprinkles-yellow/30 border-2 border-sprinkles-dark text-sprinkles-dark font-black block";
+      resultBox.innerHTML = `⏳ Berhubung terus dengan Google ModelService...`;
+
+      try {
+        const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
+        
+        if (!listRes.ok) {
+          const errData = await listRes.json().catch(() => ({}));
+          const errMsg = errData?.error?.message || `HTTP ${listRes.status}`;
+          resultBox.className = "text-xs p-3 rounded-2xl bg-rose-100 border-2 border-sprinkles-dark text-rose-800 font-black block";
+          resultBox.innerHTML = `⚠️ Kunci API Tidak Sah: ${errMsg}`;
+          return false;
+        }
+
+        const data = await listRes.json();
+        const rawList = data.models || [];
+
+        const validModels = rawList
+          .filter(m => {
+            if (!m || typeof m.name !== 'string') return false;
+            const methods = Array.isArray(m.supportedGenerationMethods) ? m.supportedGenerationMethods : [];
+            const isForbidden = m.name.includes('embedding') || m.name.includes('aqa') || m.name.includes('bison') || m.name.includes('imagen');
+            return methods.includes('generateContent') && !isForbidden;
+          })
+          .map(m => m.name.replace(/^models\//, ''));
+
+        if (validModels.length === 0) {
+          resultBox.className = "text-xs p-3 rounded-2xl bg-rose-100 border-2 border-sprinkles-dark text-rose-800 font-black block";
+          resultBox.innerHTML = `⚠️ Kunci sah, tetapi tiada model 'generateContent' dijumpai dalam akaun ini. Sila semak semula projek Google AI Studio anda.`;
+          return false;
+        }
+
+        validModels.sort((a, b) => {
+          const aFlash = a.includes('flash') ? 1 : 0;
+          const bFlash = b.includes('flash') ? 1 : 0;
+          if (aFlash !== bFlash) return bFlash - aFlash;
+          return b.localeCompare(a);
+        });
+
+        let workingModel = null;
+        let lastErrorMsg = '';
+
+        for (const candidate of validModels.slice(0, 3)) {
+          try {
+            const testRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${candidate}:generateContent?key=${key}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: "ping" }] }]
+              })
+            });
+
+            if (testRes.ok) {
+              workingModel = candidate;
+              break;
+            } else {
+              const errJson = await testRes.json().catch(() => ({}));
+              lastErrorMsg = errJson?.error?.message || `HTTP ${testRes.status}`;
+            }
+          } catch (netErr) {
+            lastErrorMsg = netErr.message;
+          }
+        }
+
+        if (workingModel) {
+          STATE.preferredModel = workingModel;
+          STATE.knownWorkingModels = validModels;
+          SafeStorage.setItem('user_preferred_gemini_model', workingModel);
+          SafeStorage.setItem('user_gemini_api_key', key);
+          STATE.apiKey = key;
+          updateApiKeyStatusIndicator();
+          updateEngineDisplay();
+
+          resultBox.className = "text-xs p-3 rounded-2xl bg-sprinkles-mint/40 border-2 border-sprinkles-dark text-sprinkles-dark font-black block";
+          resultBox.innerHTML = `✅ Kunci API SAH & 100% AKTIF!<br><span class="text-[11px] font-bold">Google mengesahkan model aktif akaun anda: <strong>${workingModel}</strong>. Sedia menjana! 🎉</span>`;
+        } else {
+          resultBox.className = "text-xs p-3 rounded-2xl bg-rose-100 border-2 border-sprinkles-dark text-rose-800 font-black block";
+          resultBox.innerHTML = `⚠️ Ralat Penjanaan Google: ${lastErrorMsg}`;
+        }
+      } catch (e) {
+        resultBox.className = "text-xs p-3 rounded-2xl bg-rose-100 border-2 border-sprinkles-dark text-rose-800 font-black block";
+        resultBox.innerHTML = `⚠️ Ralat Sambungan: ${e.message}`;
+      }
+      return false;
+    }
+
+    function updateApiKeyStatusIndicator() {
+      const dot = document.getElementById('apiStatusDot');
+      if (!dot) return;
+      if (STATE.apiKey) {
+        dot.className = "w-2.5 h-2.5 rounded-full bg-sprinkles-mint border border-sprinkles-dark inline-block shadow-sm";
+      } else {
+        dot.className = "w-2.5 h-2.5 rounded-full bg-sprinkles-yellow border border-sprinkles-dark inline-block";
+      }
+    }
+
+    function copyTextToClipboard(text) {
+      const cleanText = sanitizeMalayText(text);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(cleanText).catch(() => fallbackCopyText(cleanText));
+      } else {
+        fallbackCopyText(cleanText);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const cleanText = sanitizeMalayText(text);
+      const textarea = document.createElement('textarea');
+      textarea.value = cleanText;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(textarea);
+    }
+
+    function escapeHtml(text) {
+      const clean = sanitizeMalayText(text);
+      const div = document.createElement('div');
+      div.textContent = clean || "";
+      return div.innerHTML;
+    }
+
+    function showToast(message, type = "info") {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      let icon = 'ℹ️';
+      let bgClass = 'bg-sprinkles-lilac text-sprinkles-dark';
+
+      if (type === 'success') {
+        icon = '🎉';
+        bgClass = 'bg-sprinkles-mint text-sprinkles-dark';
+      } else if (type === 'error') {
+        icon = '⚠️';
+        bgClass = 'bg-sprinkles-orange text-white';
+      }
+
+      toast.className = `pointer-events-auto ${bgClass} border-2 border-sprinkles-dark shadow-pop text-xs px-4 py-3 rounded-2xl flex items-center space-x-2 transform transition-all duration-300 translate-y-2 opacity-0 font-black`;
+      toast.innerHTML = `<span>${icon}</span><span>${escapeHtml(message)}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => {
+          if (toast.parentNode) toast.parentNode.removeChild(toast);
+        }, 300);
+      }, 3500);
+    }
+  </script>
+</body>
+</html>
